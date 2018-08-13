@@ -66,9 +66,9 @@ function draw2() {
         context = canvas.getContext('2d');
         drawBorder(context);
         drawAxis(context);
-		//setTranslate();
-		//setScale();
-		//setRotate();
+		setTranslate();
+		setScale();
+		setRotate();
         M = mult(transform(), mult(translate(tx, ty), mult(rotate(angle),scale(sx, sy))));
         drawCube(M, context);
 		
@@ -526,8 +526,8 @@ function multVec(A, b) { //multiplicação de uma matriz (3x3) e um vetor
 </fieldset>
 <fieldset>
 		<strong>Escala</strong> <br>
-		x: <input type="number" id="sx" min="-1000" max="1000" value="0" onchange="setScale();">
-		y: <input type="number" id="sy" min="-1000" max="1000" value="0" onchange="setScale();">
+		x: <input type="number" id="sx" min="0" max="1000" value="20" onchange="setScale();">
+		y: <input type="number" id="sy" min="0" max="1000" value="20" onchange="setScale();">
 </fieldset>
 <fieldset>
 		<strong>Rotação</strong> <br>
