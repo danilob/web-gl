@@ -135,6 +135,7 @@ function drawCube(M, canv) { //desenha um cubo passando a matriz de transformaç
 
 function drawBorder(border){
     border.beginPath();
+	border.setLineDash([]);
     border.moveTo(0,0);
     border.lineTo(Width,0);
     border.lineTo(Width,Height);
