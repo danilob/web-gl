@@ -66,9 +66,9 @@ function draw2() {
         context = canvas.getContext('2d');
         drawBorder(context);
         drawAxis(context);
-		setTranslate();
-		setScale();
-		setRotate();
+		//setTranslate();
+		//setScale();
+		//setRotate();
         M = mult(transform(), mult(translate(tx, ty), mult(rotate(angle),scale(sx, sy))));
         drawCube(M, context);
 		
