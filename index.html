@@ -200,6 +200,197 @@ function redrawCanvas(){
         drawCube(M, context);
     }
 }
+ax = 0;
+ay = 0;
+bx = 0;
+cy = 0;
+by = 0;
+cx = 0;
+vx = 0;
+vy = 0;	
+function draw3() {
+    canvas2 = document.getElementById('cg-app3');
+    if (canvas2.getContext) {
+        Width = canvas2.width;
+        Height = canvas2.height;
+        context2 = canvas2.getContext('2d');
+		context2.clearRect(0, 0, 300, 200);
+		context2.beginPath();
+        drawBorder2(context2);
+        drawAxis2(context2);
+		M = mult(transform(), translate(ax, ay));
+		drawCircle(M,context2,'#68bde1');
+		drawLineParametric(ax,ay,vx,vy,context2,'#68bde1');
+		M = mult(transform(), translate(bx, by));
+		drawCircle(M,context2,'#ff9900');
+		M = mult(transform(), translate(cx, cy));
+		drawCircle(M,context2,'#ff9900');
+		drawLine(bx,by,cx,cy,context2,'#ff9900');
+		
+		
+    }
+}
+
+function setPointAVec(){
+	ax = parseInt(document.getElementById("ax").value);
+	ay = parseInt(document.getElementById("ay").value);
+	vx = parseInt(document.getElementById("vx").value);
+	vy = parseInt(document.getElementById("vy").value);
+	redrawCanvasReta();
+}
+
+function setPointBC(){
+	bx = parseInt(document.getElementById("bx").value);
+	by = parseInt(document.getElementById("by").value);
+	cx = parseInt(document.getElementById("cx").value);
+	cy = parseInt(document.getElementById("cy").value);
+	redrawCanvasReta();
+}
+
+function redrawCanvasReta(){
+	canvas2 = document.getElementById('cg-app3');
+    if (canvas2.getContext) {
+        var context = canvas2.getContext('2d');
+		context.clearRect(0, 0, 300, 200);
+		context.beginPath();
+		drawBorder2(context2);
+        drawAxis2(context2);
+        var M = mult(transform(), translate(ax, ay));
+		drawCircle(M,context,'#68bde1');
+		drawLineParametric(ax,ay,vx,vy,context,'#68bde1');
+		
+		M = mult(transform(), translate(bx, by));
+		drawCircle(M,context2,'#ff9900');
+		M = mult(transform(), translate(cx, cy));
+		drawCircle(M,context2,'#ff9900');
+		drawLine(bx,by,cx,cy,context2,'#ff9900');
+		
+    }
+}
+
+function drawBorder2(border) {
+        border.beginPath();
+		border.lineWidth = 2;
+
+		border.strokeStyle = '#000000';
+        border.setLineDash([]);
+        border.moveTo(0, 0);
+        border.lineTo(Width, 0);
+        border.lineTo(Width, Height);
+        border.lineTo(0, Height);
+        border.lineTo(0, 0);
+        border.stroke();
+    }
+
+function module(a, b) { //calcula modulo do vetor (a,b)
+        return Math.sqrt(a * a + b * b);
+    }
+	function drawAxis2(canv) {
+        canv.beginPath();
+		canv.lineWidth = 2;
+		canv.strokeStyle = '#000000';
+        canv.setLineDash([1.5, 1.5]);
+        canv.moveTo(0, Height / 2);
+        canv.lineTo(Width, Height / 2);
+        canv.stroke();
+        canv.beginPath();
+        canv.moveTo(Width / 2, 0);
+        canv.lineTo(Width / 2, Height);
+        canv.stroke();
+    }
+    function drawLineParametric(x_1, y_1, x_2, y_2, Canv,color) { //equação  com um ponto e um vetor
+        Canv.lineWidth = 3.5;
+		
+		Canv.strokeStyle = '#000000';	
+		if (module(x_2, y_2) == 0) {
+            //alert("O vetor é nulo, impossível obter a equação da reta.");
+            return;
+        } else {
+            lambda = Math.max(Height, Width);
+            y1 = y_1 + lambda * y_2;
+            x1 = x_1 + lambda * x_2;
+            lambda = -lambda;
+            y2 = y_1 + lambda * y_2;
+            x2 = x_1 + lambda * x_2;
+            v1 = multVec(transform(), [x1, y1, 1]);
+            v2 = multVec(transform(), [x2, y2, 1]);
+			Canv.beginPath();
+            Canv.moveTo(v1[0], v1[1]);
+            Canv.lineTo(v2[0], v2[1]);
+			Canv.strokeStyle = color;
+            Canv.stroke();
+        }
+		Canv.strokeStyle = '#000000';
+
+    }
+
+    function drawLine(x_1, y_1, x_2, y_2, Canv,color) { //equação da reta com dois pontos (a,b) e (c,d)
+        Canv.strokeStyle = '#000000';
+		Canv.fillStyle = '#000000';
+		Canv.lineWidth = 3.5;
+		if ((x_2 - x_1) == 0 && (y_2 - y_1) == 0) {
+            //alert("Os pontos são iguais, impossível obter a equação da reta.");
+            return;
+        } else if ((x_2 - x_1) == 0) { //mesma abscissa
+            y1 = Height / 2;
+            x1 = x_1;
+            y2 = -Height / 2;
+            x2 = x_1;
+            v1 = multVec(transform(), [x1, y1, 1]);
+            v2 = multVec(transform(), [x2, y2, 1]);
+			Canv.beginPath();
+            Canv.moveTo(v1[0], v1[1]);
+            Canv.lineTo(v2[0], v2[1]);
+			Canv.strokeStyle = color;
+            Canv.stroke();
+        } else if ((y_2 - y_1) == 0) { //mesma coordenada
+            y1 = y_1;
+            x1 = Width / 2;
+            y2 = y_1;
+            x2 = -Width / 2;
+            v1 = multVec(transform(), [x1, y1, 1]);
+            v2 = multVec(transform(), [x2, y2, 1]);
+			Canv.beginPath();
+            Canv.moveTo(v1[0], v1[1]);
+            Canv.lineTo(v2[0], v2[1]);
+			Canv.strokeStyle = color;
+            Canv.stroke();
+        } else { //forma geral
+            m = (y_2 - y_1) / (x_2 - x_1);
+            y1 = (m * (Width / 2 - x_1)) + y_1;
+            x1 = (y1 - y_1) / m + x_1;
+            y2 = (m * (-Width / 2 - x_1)) + y_1;
+            x2 = ((y2 - y_1) / m) + x_1;
+            v1 = multVec(transform(), [x1, y1, 1]);
+            v2 = multVec(transform(), [x2, y2, 1]);
+			Canv.beginPath();
+            Canv.moveTo(v1[0], v1[1]);
+            Canv.lineTo(v2[0], v2[1]);
+			Canv.strokeStyle = color;
+            Canv.stroke();
+        }
+		Canv.strokeStyle = '#000000';
+		Canv.fillStyle = '#000000';
+
+    }
+
+    function drawCircle(M, canv, color) { //desenha um círculo
+		canv.beginPath();
+        canv.strokeStyle = '#000000';
+		c = multVec(M, [0, 0, 1]);
+		//alert("circle");
+        canv.arc(c[0], c[1], 5, 0, 2 * Math.PI, false);
+        canv.lineWidth = 2;
+		canv.fillStyle = color;
+		canv.fill();
+		canv.setLineDash([]);
+        canv.strokeStyle = color;
+        canv.stroke();  
+        
+		canv.fillStyle = '#000000';
+		
+
+    }
 	</script>
 		<style>
 				/* for block of numbers */
@@ -226,7 +417,7 @@ td.hljs-ln-code {
 }
 			</style>
 	</head>
-	<body class="left-sidebar is-preload" onload="draw();draw2();">
+	<body class="left-sidebar is-preload" onload="draw();draw2();draw3();">
 		<div id="page-wrapper">
 
 			<!-- Header -->
@@ -300,6 +491,17 @@ td.hljs-ln-code {
 																</header>
 																<p>Implementação das principais matrizes de transformação aplicadas a um cubo.</p>
 															</article>	
+												</li>
+												<li>
+
+													<!-- Excerpt -->
+														<article class="box excerpt">
+															<header>
+																<span class="date">16, AGOSTO</span>
+																<h3><a href="#16agosto">Retas no Plano</a></h3>
+															</header>
+															<p>Implementação de retas a partir de dois pontos ou de um ponto e um vetor.</p>
+														</article>	
 												</li>
 											</ul>
 										</section>
@@ -535,7 +737,30 @@ function multVec(A, b) { //multiplicação de uma matriz (3x3) e um vetor
 		theta: <input type="number" id="angle" min="-360" max="360" value="45"  onchange="setRotate();"> graus.
 </fieldset></p>
 											</article>
-
+											<article class="box post">
+												<header id="16agosto">
+													<h2>Retas no plano <br><h4>16, AGOSTO</h4></h2>
+												</header>
+												<p>Implementação de retas a partir de um ponto e um vetor e a partir de dois pontos.</p>
+												<p>Saída do código acima:</p>
+												<canvas id="cg-app3" width="300" height="200"></canvas>
+												<p>Abaixo pode-se aplicar as matrizes em tempo real (atividade requisitada em sala).	
+												<fieldset>
+													<strong>Reta Azul, Ponto A e vetor V</strong> <br>
+													ax: <input type="number" id="ax" min="-1000" max="1000" value="0" onchange="setPointAVec();">
+													ay: <input type="number" id="ay" min="-1000" max="1000" value="0" onchange="setPointAVec();">
+													vx: <input type="number" id="vx" min="-1000" max="1000" value="0" onchange="setPointAVec();">
+													vy: <input type="number" id="vy" min="-1000" max="1000" value="0" onchange="setPointAVec();">
+												</fieldset>
+												<fieldset>
+													<strong>Reta Laranja, Ponto B e Ponto C</strong> <br>
+													bx: <input type="number" id="bx" min="-1000" max="1000" value="0" onchange="setPointBC();">
+													by: <input type="number" id="by" min="-1000" max="1000" value="0" onchange="setPointBC();">
+													cx: <input type="number" id="cx" min="-1000" max="1000" value="0" onchange="setPointBC();">
+													cy: <input type="number" id="cy" min="-1000" max="1000" value="0" onchange="setPointBC();">
+												</fieldset>
+												</p>
+											</article>
 								</div>
 
 						</div>
