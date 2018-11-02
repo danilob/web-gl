@@ -38,13 +38,16 @@ function drawClipping(M, recorte, context) {
 }
 
 
-function drawLine(M, line, context) {
+function drawLine(M, line, context, color = "#000000") {
+
     a = multVec(M, [line.x1, line.y1, 1]);
     b = multVec(M, [line.x2, line.y2, 1]);
     context.beginPath();
     context.moveTo(a[0], a[1]);
     context.lineTo(b[0], b[1]);
+    context.strokeStyle = color;
     context.stroke();
+    context.strokeStyle = "#000000";
 }
 
 function drawPolygon(M, polygon, context) {

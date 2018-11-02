@@ -7,109 +7,130 @@
 <html>
 
 <head>
-	<title>Web GL - Aplicações para CG</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<link rel="stylesheet" href="../assets/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.3.0/highlightjs-line-numbers.min.js"></script>
-	
-	<script src="objects-cg.js"></script>
-	<script src="mathfunctions.js"></script>
-	<script src="drawthings.js"></script>
-	<script src="script.js"></script>
-	<script>
-		hljs.initHighlightingOnLoad();
-		hljs.initLineNumbersOnLoad({
-			singleLine: true
-		});
+    <title>Web GL - Aplicações para CG</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.3.0/highlightjs-line-numbers.min.js"></script>
 
-		hljs.lineNumbersBlock(myCodeBlock, myOptions);
-	</script>
+    <script src="objects-cg.js"></script>
+    <script src="mathfunctions.js"></script>
+    <script src="drawthings.js"></script>
+    <script src="script.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad({
+            singleLine: true
+        });
 
-	<style>
-		/* for block of numbers */
-		td.hljs-ln-numbers {
-			-webkit-touch-callout: none;
-			-webkit-user-select: none;
-			-khtml-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			user-select: none;
+        hljs.lineNumbersBlock(myCodeBlock, myOptions);
+    </script>
 
-			text-align: center;
-			color: #3a3a59;
-			border-right: 1px solid #CCC;
-			vertical-align: top;
-			padding-right: 5px;
-
-			/* your custom style here */
-		}
-
-		/* for block of code */
-		td.hljs-ln-code {
-			padding-left: 10px;
-		}
-		#window{
-			border: 1px solid black;
-		}
-		#window-clipping{
-			border: 1px solid #f57665;
-		}
-	</style>
+    <style>
+        /* for block of numbers */
+        
+        td.hljs-ln-numbers {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            text-align: center;
+            color: #3a3a59;
+            border-right: 1px solid #CCC;
+            vertical-align: top;
+            padding-right: 5px;
+            /* your custom style here */
+        }
+        /* for block of code */
+        
+        td.hljs-ln-code {
+            padding-left: 10px;
+        }
+        
+        #window {
+            border: 1px solid black;
+        }
+        
+        #window-left {
+            width: 49%;
+            float: left;
+        }
+        
+        #window-right {
+            width: 49%;
+            border: 1px solid #fbf9fa;
+            float: right;
+            padding-left: 2%;
+            padding-right: 2%;
+        }
+        
+        #window-clipping {
+            border: 1px solid #f57665;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            resize: none;
+        }
+    </style>
 </head>
 
-<body class="left-sidebar is-preload" onload="draw();draw2();draw3();">
-	<div id="page-wrapper">
+<body class="left-sidebar is-preload" onload="initCanvas();">
+    <div id="page-wrapper">
 
-		<!-- Header -->
-		<section id="header">
-			<div class="container">
+        <!-- Header -->
+        <section id="header">
+            <div class="container">
 
-				<!-- Logo -->
-				<h1 id="logo">CG com Web-GL</h1>
-				<p>Aplicações em Computação Gráfica utilizando Web-GL.</p>
-
-				
-
-			</div>
-		</section>
-
-		<!-- Main -->
-		<section id="main">
-			<div class="container">
-				<div class="row">
+                <!-- Logo -->
+                <h1 id="logo">CG com Web-GL</h1>
+                <p>Aplicações em Computação Gráfica utilizando Web-GL.<br> Prof. Danilo Borges</p>
 
 
 
-					<!-- Content -->
-					<div id="content" class="col-12 col-12-medium imp-medium">
+            </div>
+        </section>
 
-						<!-- Post -->
-						<article class="box post">
-							<header id="01agosto">
-								<h2>Primeira Atividade: RECORTE 
-									<h4>(Assignment 01)</h4><br>
-								</h2>
-							</header>
-							<!--span class="image featured"><img src="images/pic04.jpg" alt="" /></span-->
-							<!--h3>Left is the opposite of right</h3-->
-							<p><b>Descrição da atividade</b>: A partir de um arquivo de entrada, defina o que será desenhado na região de
-								recorte (determinado também no arquivo de entrada) das primitivas:
-								segmentos de reta e polígonos convexos. Além disso informe quantos foram
-								os segmentos de reta e polígonos do arquivo e a quantidade dessas primitivas
-								que estão dentro da área de recorte (considere a parte de um segmento de
-								reta como estando dentro dessa área).
-							</p>
-							<p>Para realizar esta atividade se faz necessário o uso de dois algoritmos de recorte de linha bastante
-								conhecidos: Cohen-Sutherland e Liang-Barsky. E suas adaptações para recorte de polígonos.
-								Neste <a href="https://drive.google.com/open?id=1ec6wGLouWBj45Wgf3VHOt7uO6iI9S5E8" target="_blank">link</a>
-								você pode conferir os slides que foram utilizados como base para o desenvolvimento
-								desta atividade, bem como a referência bibliográfica utilizada.
-							</p>
-							<div id="content" class="col-4 col-12-medium imp-medium">
-							<textarea rows="15" cols="50" id="link">
+        <!-- Main -->
+        <section id="main">
+            <div class="container">
+                <div class="row">
+
+
+
+                    <!-- Content -->
+                    <div id="content" class="col-12 col-12-medium imp-medium">
+
+                        <!-- Post -->
+                        <article class="box post">
+                            <header id="01agosto">
+                                <h2>Primeira Atividade: RECORTE
+                                    <h4>(Assignment 01)</h4><br>
+                                </h2>
+                            </header>
+                            <!--span class="image featured"><img src="images/pic04.jpg" alt="" /></span-->
+                            <!--h3>Left is the opposite of right</h3-->
+                            <p><b>Descrição da atividade</b>: A partir de um arquivo de entrada, defina o que será desenhado na região de recorte (determinado também no arquivo de entrada) das primitivas: segmentos de reta e polígonos convexos. Além disso
+                                informe quantos foram os segmentos de reta e polígonos do arquivo e a quantidade dessas primitivas que estão dentro da área de recorte (considere a parte de um segmento de reta como estando dentro dessa área).
+                            </p>
+                            <p>Para realizar esta atividade se faz necessário o uso de dois algoritmos de recorte de linha bastante conhecidos: Cohen-Sutherland e Liang-Barsky. E suas adaptações para recorte de polígonos. Neste <a href="https://drive.google.com/open?id=1ec6wGLouWBj45Wgf3VHOt7uO6iI9S5E8"
+                                    target="_blank">link</a> você pode conferir os slides que foram utilizados como base para o desenvolvimento desta atividade, bem como a referência bibliográfica utilizada.
+                            </p>
+                            <p>
+                                Abaixo demonstro um arquivo de entrada e o algoritmo que faz o recorte aplicado nos segmentos de linha. Clique no botão SEND para enviar o arquivo de entrada ao programa de recorte. O bônus da atividade seria implementar o recorte dos polígonos.
+                            </p>
+                            <div id="content" class="col-4 col-12-medium imp-medium">
+                                <div id="window-left">
+                                    <textarea rows="20" cols="50" id="link">
 {
 	"scene": "001",
 	"clipping": {
@@ -198,39 +219,38 @@
 	}
 	}										  
 										  </textarea>
-										  <canvas id="window"></canvas><br>
-							<button onclick="openJson()">SEND</button>
-							
-							<br>
-									
-								
-							</div>
-							
-							<div id="content" class="col-12 col-12-medium imp-medium">
-									<canvas id="window-clipping"></canvas>
-							</div>
-					</div>
-		</section>
-	</div>
-	</div>
-	</div>
-	<div id="copyright" class="container">
-		<ul class="links">
-			<!--li>&copy; Danilo Borges. All rights reserved.</li-->
-			<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-		</ul>
-	</div>
-	</section>
 
-	</div>
+                                    <button onclick="openJson()">SEND</button>
+                                </div>
 
-	<!-- Scripts -->
-	<script src="../assets/js/jquery.min.js"></script>
-	<script src="../assets/js/jquery.dropotron.min.js"></script>
-	<script src="../assets/js/browser.min.js"></script>
-	<script src="../assets/js/breakpoints.min.js"></script>
-	<script src="../assets/js/util.js"></script>
-	<script src="../assets/js/main.js"></script>
+                                <div id="window-right">
+                                    Canvas completo com arquivo de entrada:
+                                    <canvas id="window"></canvas><br> Canvas somente com a área de recorte:
+                                    <canvas id="window-clipping"></canvas>
+                                    <span id="data-set"></span>
+                                </div>
+                            </div>
+        </section>
+        </div>
+        </div>
+        </div>
+        <div id="copyright" class="container">
+            <ul class="links">
+                <!--li>&copy; Danilo Borges. All rights reserved.</li-->
+                <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            </ul>
+        </div>
+        </section>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.dropotron.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
 
 
 </body>
