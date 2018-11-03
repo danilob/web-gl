@@ -1,0 +1,148 @@
+<html>
+
+<head>
+    <title>Web GL - Aplicações para CG</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.3.0/highlightjs-line-numbers.min.js"></script>
+
+    <link href="layout.css" rel="stylesheet">
+    <script src="mathfunctions.js"></script>
+
+    <style>
+        /* for block of numbers */
+        
+        td.hljs-ln-numbers {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            text-align: center;
+            color: #3a3a59;
+            border-right: 1px solid #CCC;
+            vertical-align: top;
+            padding-right: 5px;
+            /* your custom style here */
+        }
+        /* for block of code */
+        
+        td.hljs-ln-code {
+            padding-left: 10px;
+        }
+        
+        #window {
+            border: 1px solid black;
+        }
+        
+        #window-left {
+            width: 49%;
+            float: left;
+        }
+        
+        #window-right {
+            width: 49%;
+            border: 1px solid #fbf9fa;
+            float: right;
+            padding-left: 2%;
+            padding-right: 2%;
+        }
+        
+        #window-clipping {
+            border: 1px solid #f57665;
+        }
+    </style>
+</head>
+
+<body class="left-sidebar is-preload">
+    <div id="page-wrapper">
+
+        <!-- Header -->
+        <section id="header">
+            <div class="container">
+
+                <!-- Logo -->
+                <h1 id="logo">CG com Web-GL</h1>
+                <p>Aplicações em Computação Gráfica utilizando Web-GL.<br> Prof. Danilo Borges</p>
+
+
+
+            </div>
+        </section>
+
+        <!-- Main -->
+        <section id="main">
+            <div class="container">
+                <div class="row">
+
+
+
+                    <!-- Content -->
+                    <div id="content" class="col-12 col-12-medium imp-medium">
+
+                        <!-- Post -->
+                        <article class="box post">
+                            <header id="01agosto">
+                                <h2>Terceira Atividade: CURVAS
+                                    <h4>(Assignment 03)</h4><br>
+                                </h2>
+                            </header>
+                            <!--span class="image featured"><img src="images/pic04.jpg" alt="" /></span-->
+                            <!--h3>Left is the opposite of right</h3-->
+                            <p><b>Descrição da atividade</b>: Crie ambas as curvas, Hermite e Bézier, o usuário entrará com os 4 pontos de controle e a curva terá que ser gerada a partir desses pontos.
+                            </p>
+                            <p>Para realizar esta atividade é necessário a definição dos pontos de controle de ambas as curvas. Neste <a href="https://drive.google.com/file/d/10TwoYcx_yDUwBVniMMIPEC75fZKhc7tq/view" target="_blank">link</a> você pode conferir
+                                os slides que foram utilizados como base para o desenvolvimento desta atividade, bem como a referência bibliográfica utilizada. O bônus da atividade seria implementar o desenho de outros tipos de curvas que possuem propriedade
+                                de desenho a partir de polinômios.
+                            </p>
+                            <p>
+                                Abaixo você pode definir os dois tipos de curvas, basta definir os quatro pontos de controle e chamá-los nas funções: setHermite(p0,p1,p2,p3) e setBezier(p0,p1,p2,p3).
+                            </p>
+                            <div id="content" class="col-4 col-12-medium imp-medium">
+                                <canvas id="canvas" width="900" height="400" class="playable-canvas"></canvas><br>
+
+                                <textarea id="code" class="playable-code">
+p0 = [-20,-20];
+p1 = [20,20];
+p0l = [400,0];
+p1l = [0,400];
+setHermite(p0,p1,p0l,p1l);
+p0 = [-250,-100];
+p1 = [-50,140];
+p2 = [100,-150];
+p3 = [300,125];
+setBezier(p0,p1,p2,p3);
+  </textarea>
+                                <script src="script.js"></script>
+
+                            </div>
+        </section>
+
+
+        <div id="copyright" class="container">
+            <ul class="links">
+                <!--li>&copy; Danilo Borges. All rights reserved.</li-->
+                <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            </ul>
+        </div>
+
+
+        </div>
+
+        <!-- Scripts -->
+        <script src="../assets/js/jquery.min.js"></script>
+        <script src="../assets/js/jquery.dropotron.min.js"></script>
+        <script src="../assets/js/browser.min.js"></script>
+        <script src="../assets/js/breakpoints.min.js"></script>
+        <script src="../assets/js/util.js"></script>
+        <script src="../assets/js/main.js"></script>
+
+
+</body>
+
+
+</html>
