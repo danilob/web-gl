@@ -10,8 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.3.0/highlightjs-line-numbers.min.js"></script>
 
     <link href="layout.css" rel="stylesheet">
-    <script src="mathfunctions.js"></script>
-
+  <script src="mathfunctions.js"></script>
+  <script src="arclength.js"></script>
     <style>
         /* for block of numbers */
         
@@ -55,6 +55,13 @@
         #window-clipping {
             border: 1px solid #f57665;
         }
+        .playable-buttons{
+            width:900px;
+        }
+        .playable-code{
+            width:900px;
+            min-height: 300px;
+        }
     </style>
 </head>
 
@@ -79,38 +86,52 @@
             <div class="container">
                 <div class="row">
 
-
-
                     <!-- Content -->
                     <div id="content" class="col-12 col-12-medium imp-medium">
 
                         <!-- Post -->
                         <article class="box post">
                             <header id="01agosto">
-                                <h2>Segunda Atividade: RASTERIZAÇÃO
-                                    <h4>(Assignment 02)</h4><br>
+                                <h2>Quarta Atividade: CONTROLE DE VELOCIDADE
+                                    <h4>(Assignment 04)</h4><br>
                                 </h2>
                             </header>
                             <!--span class="image featured"><img src="images/pic04.jpg" alt="" /></span-->
                             <!--h3>Left is the opposite of right</h3-->
-                            <p><b>Descrição da atividade</b>: Implemente o algoritmo de Bresenham, considerando todos os tipos de orientação de reta, a partir de dois pontos dados. Construa uma grid determinada a partir da criação de uma reta (que o usuário
-                                irá informar). Faça com que pelo layout o usuário possa alterar os valores dos pontos em tempo real.
+                            <p><b>Descrição da atividade</b>: Importe para seu projeto o <a href="https://github.com/danilob/arclength.js" target="_blank">código</a> que calcula o comprimento do ArcLength
+                                de um polinômio de terceiro grau. Crie a curva de Hermite a partir do
+                                ArcLength, parametrizando o <i>u</i> de acordo com o comprimento da curva, <i>s</i>.
+                                Implemente o controle de velocidade, interpolando com parâmetro <i>t</i>, que
+                                utiliza partes senoidais para aceleração e desaceleração para produzir a
+                                animação do deslocamento da partícula ao longo da curva no canvas. Não
+                                esqueça de submetê-lo ao github.
                             </p>
-                            <p>Para realizar esta atividade se faz necessário o uso de Brasenham. Neste <a href="https://drive.google.com/file/d/1Q8hPZmr1V93P9-zJBFh6wP0G9S5gnmWl/view" target="_blank">link</a> você pode conferir os slides que foram utilizados
-                                como base para o desenvolvimento desta atividade, bem como a referência bibliográfica utilizada. O bônus da atividade seria implementar a rasterização de círculos e elipses.
+                            <p>Para realizar esta atividade é necessário parametrizar a curva em relação ao comprimento, dividir o tempo
+                                de acordo com o tamanho da curva para então realizar o movimento da partícula. Abaixo para exemplificar a aplicação
+                                será utilizada uma curva de Bézier.
                             </p>
-                            <p>
-                                Abaixo demonstro a aplicação do algoritmo de Brasenham para linhas. Você pode informar uma nova reta informando o seguinte código:
-                                <i>drawLine(x0,y0,x1,y1);</i>, onde (x0,y0) é o ponto inicial da reta e (x1,y1) é o ponto final da reta. Teste os seguintes valores, substituindo a linha relacionada no textarea: drawLine(-8,14,9,5), drawLine(-8,14,9,5),
-                                drawLine(30,15,25,5) e drawLine(20,19,15,3);
-                            </p>
-                            <div id="content" class="col-4 col-12-medium imp-medium">
-                                <canvas id="canvas" width="400" height="200" class="playable-canvas"></canvas><br>
-
-                                <textarea id="code" class="playable-code">
-setScale(10);
-drawLine(-80,140,15,50);
-  </textarea>
+                            
+                            <article>
+                                    <canvas id="canvas" width="900" height="400" class="playable-canvas"></canvas>
+                                    <div class="playable-buttons">
+                                    Time: <input id="time" type="number" min="2" max="60" value=5 onchange="setTime();"/>
+                                      <input id="play" type="button" value="Play" />
+                                      <input id="pause" type="button" value="Pause" />
+                                      <input id="reset" type="button" value="Reset" />
+                                    </div>
+                                    <textarea id="code" class="playable-code">
+setSizePoints(50); //numeros de pontos para construção da curva
+p0 = [-250,-100];
+p1 = [-50,140];
+p2 = [100,-150];
+p3 = [300,125];
+setBezier(p0,p1,p2,p3);
+//showPoints();
+calculateArcLength(p0,p1,p2,p3);
+//senoidal ease-in ease-out
+k1 = 0.3;
+k2 = 0.6;    
+                                    </textarea>
                                 <script src="script.js"></script>
 
                             </div>

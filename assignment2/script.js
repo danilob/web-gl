@@ -37,15 +37,15 @@ function drawLine(x1, y1, x2, y2) {
     //constroi a grid de "pixels"
     ctx.scale(scale, scale);
     ctx.beginPath();
-    ctx.lineWidth = 1. / scale;
+    ctx.lineWidth = 1. / (scale*2);
     for (var i = 0; i <= Math.abs(dX); i++) {
         for (var j = 0; j <= Math.abs(dY); j++) {
             ctx.strokeRect(i, j, 1, 1);
         }
     }
 
-    console.log(p0);
-    console.log(p1);
+    //console.log(p0);
+    //console.log(p1);
 
     var X = p0[0];
     var Y = p0[1];
