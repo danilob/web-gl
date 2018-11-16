@@ -1,0 +1,151 @@
+<html>
+
+<head>
+    <title>Web GL - Aplicações para CG</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.3.0/highlightjs-line-numbers.min.js"></script>
+
+    <link href="layout.css" rel="stylesheet">
+  <script src="mathfunctions.js"></script>
+  <script src="arclength.js"></script>
+    <style>
+        /* for block of numbers */
+        
+        td.hljs-ln-numbers {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            text-align: center;
+            color: #3a3a59;
+            border-right: 1px solid #CCC;
+            vertical-align: top;
+            padding-right: 5px;
+            /* your custom style here */
+        }
+        /* for block of code */
+        
+        td.hljs-ln-code {
+            padding-left: 10px;
+        }
+        
+        #window {
+            border: 1px solid black;
+        }
+        
+        #window-left {
+            width: 49%;
+            float: left;
+        }
+        
+        #window-right {
+            width: 49%;
+            border: 1px solid #fbf9fa;
+            float: right;
+            padding-left: 2%;
+            padding-right: 2%;
+        }
+        
+        #window-clipping {
+            border: 1px solid #f57665;
+        }
+        .playable-buttons{
+            width:900px;
+        }
+        .playable-code{
+            width:900px;
+            min-height: 300px;
+        }
+    </style>
+</head>
+
+<body class="left-sidebar is-preload">
+    <div id="page-wrapper">
+
+        <!-- Header -->
+        <section id="header">
+            <div class="container">
+
+                <!-- Logo -->
+                <h1 id="logo">CG com Web-GL</h1>
+                <p>Aplicações em Computação Gráfica utilizando Web-GL.<br> Prof. Danilo Borges</p>
+
+
+
+            </div>
+        </section>
+
+        <!-- Main -->
+        <section id="main">
+            <div class="container">
+                <div class="row">
+
+                    <!-- Content -->
+                    <div id="content" class="col-12 col-12-medium imp-medium">
+
+                        <!-- Post -->
+                        <article class="box post">
+                            <header id="01agosto">
+                                <h2>Quarta Atividade: CONTROLE DE VELOCIDADE
+                                    <h4>(Assignment 04)</h4><br>
+                                </h2>
+                            </header>
+                            <!--span class="image featured"><img src="images/pic04.jpg" alt="" /></span-->
+                            <!--h3>Left is the opposite of right</h3-->
+                            <p><b>Descrição da atividade</b>: Utilize como base <a href="https://developer.mozilla.org/pt-BR/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL" target="_blank">este tutorial</a> para realizar o desenho de um cubo, 
+                                a partir deste cubo realize as seguintes implementações: representar uma orientação com quatérnions para 
+                                realizar a rotação do cubo interpolando entre dois quatérnions
+                                 determinados utilizando Slerp. Tanto o tempo como os quatérnions deverão ser especificados pelo usuário.
+                            </p>
+                            <p>No código abaixo você poderá determinar o quatérnio utilizando ângulos de Euler (ex.: q = Quaternion(90,0,0)) e no frame
+                                adicionar o Quatérnion e o tempo, em segundos, de cada frame (ex.: f1 = Frame(q,5)). Após definir todos os frames é utilizando
+                                uma lista que será responsável por realizar a interpolação entre os frames utilizando a função goAnimate(lista) e dando o play no botão.
+                            </p>
+                            
+                            <article>
+                                    <canvas id="canvas" width="900" height="400" class="playable-canvas"></canvas>
+                                    <div class="playable-buttons">
+                                   
+                                      <input id="play" type="button" value="Play" />
+                                      <input id="pause" type="button" value="Pause" />
+                                      <input id="reset" type="button" value="Reset" />
+                                    </div>
+                                    <textarea id="code" class="playable-code">
+  
+                                    </textarea>
+                                    <script src="gl-matrix.js"></script>
+                                    <script src="script.js"></script>
+
+                            </div>
+        </section>
+
+
+        <div id="copyright" class="container">
+            <ul class="links">
+                <!--li>&copy; Danilo Borges. All rights reserved.</li-->
+                <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            </ul>
+        </div>
+
+
+        </div>
+
+        <!-- Scripts -->
+        <script src="../assets/js/jquery.min.js"></script>
+        <script src="../assets/js/jquery.dropotron.min.js"></script>
+        <script src="../assets/js/browser.min.js"></script>
+        <script src="../assets/js/breakpoints.min.js"></script>
+        <script src="../assets/js/util.js"></script>
+        <script src="../assets/js/main.js"></script>
+
+
+</body>
+
+
+</html>
