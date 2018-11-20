@@ -5,23 +5,54 @@ var edit = document.getElementById("edit");
 var code = textarea.value;
 main();
 running = false;
+var lista = []
+var last = new Quaternion();
+
+function goAnimate(l) {
+    lista = []
+    lista.push(new Frame(new Quaternion(0, 0, 0), 0));
+    for (var i = 0; i < l.length; i++) {
+        lista.push(l[i]);
+    }
+    console.log(lista.length);
+    return lista.length;
+}
+
+play.addEventListener("click", function() {
+
+    running = true;
+
+
+});
+
+pause.addEventListener("click", function() {
+    running = false;
+});
+
+reset.addEventListener("click", function() {
+    timeCurrent = 0;
+    then = 0;
+    now = 0;
+    running = true;
+
+});
 //
 // Start here
 //
 function main() {
-  const canvas = document.querySelector('#canvas');
-  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    const canvas = document.querySelector('#canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
-  // If we don't have a GL context, give up now
+    // If we don't have a GL context, give up now
 
-  if (!gl) {
-    alert('Unable to initialize WebGL. Your browser or machine may not support it.');
-    return;
-  }
+    if (!gl) {
+        alert('Unable to initialize WebGL. Your browser or machine may not support it.');
+        return;
+    }
 
-  // Vertex shader program
+    // Vertex shader program
 
-  const vsSource = `
+    const vsSource = `
     attribute vec4 aVertexPosition;
     attribute vec4 aVertexColor;
 
@@ -36,9 +67,9 @@ function main() {
     }
   `;
 
-  // Fragment shader program
+    // Fragment shader program
 
-  const fsSource = `
+    const fsSource = `
     varying lowp vec4 vColor;
 
     void main(void) {
@@ -46,47 +77,47 @@ function main() {
     }
   `;
 
-  // Initialize a shader program; this is where all the lighting
-  // for the vertices and so forth is established.
-  const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+    // Initialize a shader program; this is where all the lighting
+    // for the vertices and so forth is established.
+    const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
-  // Collect all the info needed to use the shader program.
-  // Look up which attributes our shader program is using
-  // for aVertexPosition, aVevrtexColor and also
-  // look up uniform locations.
-  const programInfo = {
-    program: shaderProgram,
-    attribLocations: {
-      vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-      vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
-    },
-    uniformLocations: {
-      projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-      modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-    },
-  };
+    // Collect all the info needed to use the shader program.
+    // Look up which attributes our shader program is using
+    // for aVertexPosition, aVevrtexColor and also
+    // look up uniform locations.
+    const programInfo = {
+        program: shaderProgram,
+        attribLocations: {
+            vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+            vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
+        },
+        uniformLocations: {
+            projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
+            modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+        },
+    };
 
-  // Here's where we call the routine that builds all the
-  // objects we'll be drawing.
-  const buffers = initBuffers(gl);
+    // Here's where we call the routine that builds all the
+    // objects we'll be drawing.
+    const buffers = initBuffers(gl);
 
-  var then = 0;
-  var timeCurrent = 0;
+    var then = 0;
+    timeCurrent = 0;
 
-  // Draw the scene repeatedly
-  function render(now) {
-    now *= 0.001;  // convert to seconds
-    const deltaTime = now - then;
-    then = now;
-    if(running){
-      timeCurrent += deltaTime;
-      console.log(timeCurrent);
+    // Draw the scene repeatedly
+    function render(now) {
+        now *= 0.001; // convert to seconds
+        const deltaTime = now - then;
+        then = now;
+        if (running) {
+            timeCurrent += deltaTime;
+            console.log(timeCurrent);
+        }
+        drawScene(gl, programInfo, buffers, timeCurrent);
+        requestAnimationFrame(render);
+
     }
-    drawScene(gl, programInfo, buffers, timeCurrent);
     requestAnimationFrame(render);
-    
-  }
-  requestAnimationFrame(render);
 }
 
 //
@@ -97,282 +128,270 @@ function main() {
 //
 function initBuffers(gl) {
 
-  // Create a buffer for the cube's vertex positions.
+    // Create a buffer for the cube's vertex positions.
 
-  const positionBuffer = gl.createBuffer();
+    const positionBuffer = gl.createBuffer();
 
-  // Select the positionBuffer as the one to apply buffer
-  // operations to from here out.
+    // Select the positionBuffer as the one to apply buffer
+    // operations to from here out.
 
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-  // Now create an array of positions for the cube.
+    // Now create an array of positions for the cube.
 
-  const positions = [
-    // Front face
-    -0.5, -0.5,  0.5,
-     0.5, -0.5,  0.5,
-     0.5,  0.5,  0.5,
-    -0.5,  0.5,  0.5,
+    const positions = [
+        // Front face
+        -0.5, -0.5, 0.5,
+        0.5, -0.5, 0.5,
+        0.5, 0.5, 0.5, -0.5, 0.5, 0.5,
 
-    // Back face
-    -0.5, -0.5, -0.5,
-    -0.5,  0.5, -0.5,
-     0.5,  0.5, -0.5,
-     0.5, -0.5, -0.5,
+        // Back face
+        -0.5, -0.5, -0.5, -0.5, 0.5, -0.5,
+        0.5, 0.5, -0.5,
+        0.5, -0.5, -0.5,
 
-    // Top face
-    -0.5,  0.5, -0.5,
-    -0.5,  0.5,  0.5,
-     0.5,  0.5,  0.5,
-     0.5,  0.5, -0.5,
+        // Top face
+        -0.5, 0.5, -0.5, -0.5, 0.5, 0.5,
+        0.5, 0.5, 0.5,
+        0.5, 0.5, -0.5,
 
-    // Bottom face
-    -0.5, -0.5, -0.5,
-     0.5, -0.5, -0.5,
-     0.5, -0.5,  0.5,
-    -0.5, -0.5,  0.5,
+        // Bottom face
+        -0.5, -0.5, -0.5,
+        0.5, -0.5, -0.5,
+        0.5, -0.5, 0.5, -0.5, -0.5, 0.5,
 
-    // Right face
-     0.5, -0.5, -0.5,
-     0.5,  0.5, -0.5,
-     0.5,  0.5,  0.5,
-     0.5, -0.5,  0.5,
+        // Right face
+        0.5, -0.5, -0.5,
+        0.5, 0.5, -0.5,
+        0.5, 0.5, 0.5,
+        0.5, -0.5, 0.5,
 
-    // Left face
-    -0.5, -0.5, -0.5,
-    -0.5, -0.5,  0.5,
-    -0.5,  0.5,  0.5,
-    -0.5,  0.5, -0.5,
-  ];
+        // Left face
+        -0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5,
+    ];
 
-  // Now pass the list of positions into WebGL to build the
-  // shape. We do this by creating a Float32Array from the
-  // JavaScript array, then use it to fill the current buffer.
+    // Now pass the list of positions into WebGL to build the
+    // shape. We do this by creating a Float32Array from the
+    // JavaScript array, then use it to fill the current buffer.
 
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-  // Now set up the colors for the faces. We'll use solid colors
-  // for each face.
+    // Now set up the colors for the faces. We'll use solid colors
+    // for each face.
 
-  const faceColors = [
-    [1.0,  1.0,  1.0,  1.0],    // Front face: white
-    [1.0,  0.0,  0.0,  1.0],    // Back face: red
-    [0.0,  1.0,  0.0,  1.0],    // Top face: green
-    [0.0,  0.0,  1.0,  1.0],    // Bottom face: blue
-    [1.0,  1.0,  0.0,  1.0],    // Right face: yellow
-    [1.0,  0.0,  1.0,  1.0],    // Left face: purple
-  ];
+    const faceColors = [
+        [1.0, 1.0, 1.0, 1.0], // Front face: white
+        [1.0, 0.0, 0.0, 1.0], // Back face: red
+        [0.0, 1.0, 0.0, 1.0], // Top face: green
+        [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
+        [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+        [1.0, 0.0, 1.0, 1.0], // Left face: purple
+    ];
 
-  // Convert the array of colors into a table for all the vertices.
+    // Convert the array of colors into a table for all the vertices.
 
-  var colors = [];
+    var colors = [];
 
-  for (var j = 0; j < faceColors.length; ++j) {
-    const c = faceColors[j];
+    for (var j = 0; j < faceColors.length; ++j) {
+        const c = faceColors[j];
 
-    // Repeat each color four times for the four vertices of the face
-    colors = colors.concat(c, c, c, c);
-  }
+        // Repeat each color four times for the four vertices of the face
+        colors = colors.concat(c, c, c, c);
+    }
 
-  const colorBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+    const colorBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
-  // Build the element array buffer; this specifies the indices
-  // into the vertex arrays for each face's vertices.
+    // Build the element array buffer; this specifies the indices
+    // into the vertex arrays for each face's vertices.
 
-  const indexBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    const indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-  // This array defines each face as two triangles, using the
-  // indices into the vertex array to specify each triangle's
-  // position.
+    // This array defines each face as two triangles, using the
+    // indices into the vertex array to specify each triangle's
+    // position.
 
-  const indices = [
-    0,  1,  2,      0,  2,  3,    // front
-    4,  5,  6,      4,  6,  7,    // back
-    8,  9,  10,     8,  10, 11,   // top
-    12, 13, 14,     12, 14, 15,   // bottom
-    16, 17, 18,     16, 18, 19,   // right
-    20, 21, 22,     20, 22, 23,   // left
-  ];
+    const indices = [
+        0, 1, 2, 0, 2, 3, // front
+        4, 5, 6, 4, 6, 7, // back
+        8, 9, 10, 8, 10, 11, // top
+        12, 13, 14, 12, 14, 15, // bottom
+        16, 17, 18, 16, 18, 19, // right
+        20, 21, 22, 20, 22, 23, // left
+    ];
 
-  // Now send the element array to GL
+    // Now send the element array to GL
 
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
-      new Uint16Array(indices), gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
+        new Uint16Array(indices), gl.STATIC_DRAW);
 
-  return {
-    position: positionBuffer,
-    color: colorBuffer,
-    indices: indexBuffer,
-  };
+    return {
+        position: positionBuffer,
+        color: colorBuffer,
+        indices: indexBuffer,
+    };
 }
-function drawCanvas(){
-  eval(textarea.value);
+
+
+function drawCanvas() {
+    eval(textarea.value);
 }
 //
 // Draw the scene.
 //
 function drawScene(gl, programInfo, buffers, deltaTime) {
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
-  gl.clearDepth(1.0);                 // Clear everything
-  gl.enable(gl.DEPTH_TEST);           // Enable depth testing
-  gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+    //drawCanvas();
+    gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+    gl.clearDepth(1.0); // Clear everything
+    gl.enable(gl.DEPTH_TEST); // Enable depth testing
+    gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 
-  // Clear the canvas before we start drawing on it.
+    // Clear the canvas before we start drawing on it.
 
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  // Create a perspective matrix, a special matrix that is
-  // used to simulate the distortion of perspective in a camera.
-  // Our field of view is 45 degrees, with a width/height
-  // ratio that matches the display size of the canvas
-  // and we only want to see objects between 0.1 units
-  // and 100 units away from the camera.
+    // Create a perspective matrix, a special matrix that is
+    // used to simulate the distortion of perspective in a camera.
+    // Our field of view is 45 degrees, with a width/height
+    // ratio that matches the display size of the canvas
+    // and we only want to see objects between 0.1 units
+    // and 100 units away from the camera.
 
-  const fieldOfView = 45 * Math.PI / 180;   // in radians
-  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-  const zNear = 0.1;
-  const zFar = 100.0;
-  const projectionMatrix = mat4.create();
+    const fieldOfView = 45 * Math.PI / 180; // in radians
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const zNear = 0.1;
+    const zFar = 100.0;
+    const projectionMatrix = mat4.create();
 
-  // note: glmatrix.js always has the first argument
-  // as the destination to receive the result.
-  mat4.perspective(projectionMatrix,
-                   fieldOfView,
-                   aspect,
-                   zNear,
-                   zFar);
+    // note: glmatrix.js always has the first argument
+    // as the destination to receive the result.
+    mat4.perspective(projectionMatrix,
+        fieldOfView,
+        aspect,
+        zNear,
+        zFar);
 
-  // Set the drawing position to the "identity" point, which is
-  // the center of the scene.
-  modelViewMatrix = mat4.create();
+    // Set the drawing position to the "identity" point, which is
+    // the center of the scene.
+    modelViewMatrix = mat4.create();
 
-  // Now move the drawing position a bit to where we want to
-  // start drawing the square.
+    // Now move the drawing position a bit to where we want to
+    // start drawing the square.
 
-  quat = new Quaternion();
-  quat.s = Math.cos(45*Math.PI/360);
-  quat.x = Math.sin(45*Math.PI/360);
-  quat.y = Math.sin(45*Math.PI/360);
-  quat.z = Math.sin(45*Math.PI/360);
+    //quat = new Quaternion();
+    //quat.s = Math.cos(45*Math.PI/360);
+    //quat.x = Math.sin(45*Math.PI/360);
+    //quat.y = Math.sin(45*Math.PI/360);
+    //quat.z = Math.sin(45*Math.PI/360);
 
-  quat = quat.normalize();
+    //quat = quat.normalize();
 
-  modelViewMatrix = create2();
-  //modelViewMatrix = glMult4x4(glTranslate([0,0,-20]),glMult4x4(glScale([4,4,4]),modelViewMatrix));
-  modelViewMatrix = glMult4x4(glMult4x4(glScale([3,3,3]),glMult4x4(glRotateFromQuaternion(quat),modelViewMatrix)),glTranslate([0,0,-10]));
+    var quat = new Quaternion;
+    if (running) {
+        quat = goAnimateFrames(lista, timeCurrent);
+        last = quat;
+    } else {
+        quat = last;
+    }
+    modelViewMatrix = create2();
+    //modelViewMatrix = glMult4x4(glTranslate([0,0,-20]),glMult4x4(glScale([4,4,4]),modelViewMatrix));
+    modelViewMatrix = glMult4x4(glScale([0.5, 0.5, 0.5]), glMult4x4(glRotateFromQuaternion(quat), glTranslate([0, 0, -2])));
 
-  //console.log(modelViewMatrix);
-  //mat4 = modelViewMatrix;
-  //alert(modelViewMatrix);
-  // v = mat4.translate(modelViewMatrix,     // destination matrix
-  //               modelViewMatrix,     // matrix to translate
-  //               [0.0, 0.0, -10.0]);  // amount to translate
-  // console.log(v);
-  //mat4.rotate(modelViewMatrix,  // destination matrix
-  //           modelViewMatrix,  // matrix to rotate
-  //           cubeRotation,     // amount to rotate in radians
-  //           [0, 0, 1]);       // axis to rotate around (Z)
-  //mat4.rotate(modelViewMatrix,  // destination matrix
-  //           modelViewMatrix,  // matrix to rotate
-  //           cubeRotation * .7,// amount to rotate in radians
-  //           [0, 1, 0]);       // axis to rotate around (X)
+    //console.log(n);
 
-  // Tell WebGL how to pull out the positions from the position
-  // buffer into the vertexPosition attribute
-  {
-    const numComponents = 3;
-    const type = gl.FLOAT;
-    const normalize = false;
-    const stride = 0;
-    const offset = 0;
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-    gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexPosition,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset);
-    gl.enableVertexAttribArray(
-        programInfo.attribLocations.vertexPosition);
-  }
 
-  // Tell WebGL how to pull out the colors from the color buffer
-  // into the vertexColor attribute.
-  {
-    const numComponents = 4;
-    const type = gl.FLOAT;
-    const normalize = false;
-    const stride = 0;
-    const offset = 0;
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
-    gl.vertexAttribPointer(
-        programInfo.attribLocations.vertexColor,
-        numComponents,
-        type,
-        normalize,
-        stride,
-        offset);
-    gl.enableVertexAttribArray(
-        programInfo.attribLocations.vertexColor);
-  }
+    {
+        const numComponents = 3;
+        const type = gl.FLOAT;
+        const normalize = false;
+        const stride = 0;
+        const offset = 0;
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertexPosition,
+            numComponents,
+            type,
+            normalize,
+            stride,
+            offset);
+        gl.enableVertexAttribArray(
+            programInfo.attribLocations.vertexPosition);
+    }
 
-  // Tell WebGL which indices to use to index the vertices
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+    // Tell WebGL how to pull out the colors from the color buffer
+    // into the vertexColor attribute.
+    {
+        const numComponents = 4;
+        const type = gl.FLOAT;
+        const normalize = false;
+        const stride = 0;
+        const offset = 0;
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertexColor,
+            numComponents,
+            type,
+            normalize,
+            stride,
+            offset);
+        gl.enableVertexAttribArray(
+            programInfo.attribLocations.vertexColor);
+    }
 
-  // Tell WebGL to use our program when drawing
+    // Tell WebGL which indices to use to index the vertices
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
 
-  gl.useProgram(programInfo.program);
+    // Tell WebGL to use our program when drawing
 
-  // Set the shader uniforms
+    gl.useProgram(programInfo.program);
 
-  gl.uniformMatrix4fv(
-      programInfo.uniformLocations.projectionMatrix,
-      false,
-      projectionMatrix);
-  gl.uniformMatrix4fv(
-      programInfo.uniformLocations.modelViewMatrix,
-      false,
-      modelViewMatrix);
+    // Set the shader uniforms
 
-  {
-    const vertexCount = 36;
-    const type = gl.UNSIGNED_SHORT;
-    const offset = 0;
-    gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
-  }
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.projectionMatrix,
+        false,
+        projectionMatrix);
+    gl.uniformMatrix4fv(
+        programInfo.uniformLocations.modelViewMatrix,
+        false,
+        modelViewMatrix);
 
-  // Update the rotation for the next draw
+    {
+        const vertexCount = 36;
+        const type = gl.UNSIGNED_SHORT;
+        const offset = 0;
+        gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
+    }
 
-  //cubeRotation += deltaTime;
+    // Update the rotation for the next draw
+
+    //cubeRotation += deltaTime;
 }
 
 //
 // Initialize a shader program, so WebGL knows how to draw our data
 //
 function initShaderProgram(gl, vsSource, fsSource) {
-  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
-  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+    const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+    const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
-  // Create the shader program
+    // Create the shader program
 
-  const shaderProgram = gl.createProgram();
-  gl.attachShader(shaderProgram, vertexShader);
-  gl.attachShader(shaderProgram, fragmentShader);
-  gl.linkProgram(shaderProgram);
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
 
-  // If creating the shader program failed, alert
+    // If creating the shader program failed, alert
 
-  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
-    return null;
-  }
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+        alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
+        return null;
+    }
 
-  return shaderProgram;
+    return shaderProgram;
 }
 
 //
@@ -380,238 +399,121 @@ function initShaderProgram(gl, vsSource, fsSource) {
 // compiles it.
 //
 function loadShader(gl, type, source) {
-  const shader = gl.createShader(type);
+    const shader = gl.createShader(type);
 
-  // Send the source to the shader object
+    // Send the source to the shader object
 
-  gl.shaderSource(shader, source);
+    gl.shaderSource(shader, source);
 
-  // Compile the shader program
+    // Compile the shader program
 
-  gl.compileShader(shader);
+    gl.compileShader(shader);
 
-  // See if it compiled successfully
+    // See if it compiled successfully
 
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
+    }
 
-  return shader;
+    return shader;
 }
 
 function create2() {
-  var out = new glMatrix.ARRAY_TYPE(16);
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = 1;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = 1;
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  //console.log(out.length);
-  return out;
+    var out = new glMatrix.ARRAY_TYPE(16);
+    out[0] = 1;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[5] = 1;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = 1;
+    out[11] = 0;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
+    return out;
 }
 
-function glScale(v){
-  var out = new glMatrix.ARRAY_TYPE(16);
-  out[0] = v[0];
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = v[1];
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = v[2];
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
+function glScale(v) {
+    var out = new glMatrix.ARRAY_TYPE(16);
+    out[0] = v[0];
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[5] = v[1];
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = v[2];
+    out[11] = 0;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
+    return out;
 }
 
-function glTranslate(v){
-  var out = new glMatrix.ARRAY_TYPE(16);
-  out[0] = 1;
-  out[1] = 0;
-  out[2] = 0;
-  out[3] = 0;
-  out[4] = 0;
-  out[5] = 1;
-  out[6] = 0;
-  out[7] = 0;
-  out[8] = 0;
-  out[9] = 0;
-  out[10] = 1;
-  out[11] = 0;
-  out[12] = v[0];
-  out[13] = v[1];
-  out[14] = v[2];
-  out[15] = 1;
-  return out;
+function glTranslate(v) {
+    var out = new glMatrix.ARRAY_TYPE(16);
+    out[0] = 1;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[5] = 1;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = 1;
+    out[11] = 0;
+    out[12] = v[0];
+    out[13] = v[1];
+    out[14] = v[2];
+    out[15] = 1;
+    return out;
 }
 //http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToMatrix/
-function glRotate(theta,v){ //theta em graus
-  angle = Math.PI*theta/180.;
-  v = versor3D(v);
-  x = v[0];
-  y = v[1];
-  z = v[2];
-  c = Math.cos(angle);
-  s = Math.sin(angle);
-  t = 1 - c; 
-  var out = new glMatrix.ARRAY_TYPE(16);
-  out[0] = t*x*x+c;
-  out[1] = t*x*y+z*s;
-  out[2] = t*x*z-y*s;
-  out[3] = 0;
-  out[4] = t*x*y-z*s;
-  out[5] = t*y*y+c;
-  out[6] = t*y*z+x*s;
-  out[7] = 0;
-  out[8] = t*x*z+y*s;
-  out[9] = t*y*z-x*s;
-  out[10] = t*z*z+c;
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
+function glRotate(theta, v) { //theta em graus
+    angle = Math.PI * theta / 180.;
+    v = versor3D(v);
+    x = v[0];
+    y = v[1];
+    z = v[2];
+    c = Math.cos(angle);
+    s = Math.sin(angle);
+    t = 1 - c;
+    var out = new glMatrix.ARRAY_TYPE(16);
+    out[0] = t * x * x + c;
+    out[1] = t * x * y + z * s;
+    out[2] = t * x * z - y * s;
+    out[3] = 0;
+    out[4] = t * x * y - z * s;
+    out[5] = t * y * y + c;
+    out[6] = t * y * z + x * s;
+    out[7] = 0;
+    out[8] = t * x * z + y * s;
+    out[9] = t * y * z - x * s;
+    out[10] = t * z * z + c;
+    out[11] = 0;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
+    return out;
 }
 
-function Quaternion(){
-  this.s = 1;
-  this.x = 0;
-  this.y = 0;
-  this.z = 0;
-}
 
-Quaternion.prototype.normalize = function(){
-  var q = new Quaternion();
-  m = Math.sqrt(this.s*this.s + dotVecQuat(this,this));
-  q.s = this.s/m;
-  q.x = this.x/m;
-  q.y = this.y/m;
-  q.z = this.z/m;
-  return q;
-}
 
-Quaternion.prototype.conjugate = function(){
-  var q = new Quaternion();
-  q.s = this.s;
-  q.x = -this.x;
-  q.y = -this.y;
-  q.z = -this.z;
-  return q;
-}
-
-Quaternion.prototype.inverse = function(){
-  var q = new Quaternion();
-  var mod = this.s*this.s+this.x*this.x+this.y*this.y*this.z*this.z;
-  q.s = this.s/mod;
-  q.x = -this.x/mod;
-  q.y = -this.y/mod;
-  q.z = -this.z/mod;
-  return q;
-}
-
-function multQuat(q1,q2){
-   var q = new Quaternion();
-   q.s = q1.s*q2.s-dotVecQuat(q1,q2);
-   var vec = prodVecQuat(q1,q2);
-   q.x = q1.s*q2.x+q2.s*q1.x+vec[0];
-   q.y = q1.s*q2.y+q2.s*q1.y+vec[1];
-   q.z = q1.s*q2.z+q2.s*q1.z+vec[2];
-   return q;
-} 
-
-function dotVecQuat(q1,q2){
-  //q1 e q2 sao quaternions
-  return q1.x*q2.x+q1.y*q2.y+q1.z*q2.z;
-}
-
-function prodVecQuat(q1,q2){
-  return [q1.y*q2.z-q1.z*q2.y,-(q1.x*q2.z-q1.z+q2.x),q1.x*q2.y-q1.y*q2.x];
-}
-
-function angleBetweenQuat(q1,q2){
-  return Math.acos(q1.s*q2.s + dotVecQuat(q1,q2));    
-}
-
-function glRotateFromQuaternion(q){ //theta em graus
-  var qw = q.s;
-  var qx = q.x;
-  var qy = q.y;
-  var qz = q.z;
-  var out = new glMatrix.ARRAY_TYPE(16);
-  out[0] = 1-2*qy*qy-2*qz*qz;
-  out[1] = 2*qx*qy+2*qz*qw;
-  out[2] = 2*qx*qz-2*qy*qw;
-  out[3] = 0;
-  out[4] = 2*qx*qy-2*qz*qw;
-  out[5] = 1-qx*qx-2*qz*qz;
-  out[6] = 2*qy*qz+2*qx*qw;
-  out[7] = 0;
-  out[8] = 2*qx*qz+2*qy*qw;
-  out[9] = 2*qy*qz-2*qx*qw;
-  out[10] = 1-2*qx*qx-2*qy*qy;
-  out[11] = 0;
-  out[12] = 0;
-  out[13] = 0;
-  out[14] = 0;
-  out[15] = 1;
-  return out;
-}
-
-var fps = 30;
-var now = Date.now();
-var then;
-var interval = 1000. / fps;
-var delta;
-window.requestAnimFrame = (function (callback) {
-    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
-        function (callback) {
-            window.setTimeout(callback, interval);
-        };
-})();
 
 textarea.addEventListener("input", drawCanvas);
 window.addEventListener("load", drawCanvas);
-
-
-
-play.addEventListener("click", function () {
-    
-    running = true;
-    
-       
-});
-
-pause.addEventListener("click", function () {
-    running = false;
-});
-
-reset.addEventListener("click", function () {
-    timeCurrent = 0;
-    then = 0;
-    now = 0;
-    //running = true;
-    
-});
-

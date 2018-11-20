@@ -10,8 +10,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.3.0/highlightjs-line-numbers.min.js"></script>
 
     <link href="layout.css" rel="stylesheet">
-  <script src="mathfunctions.js"></script>
-  <script src="arclength.js"></script>
+    <script src="mathfunctions.js"></script>
+    <script src="quaternion.js"></script>
+    <script src="interpolation.js"></script>
+
     <style>
         /* for block of numbers */
         
@@ -55,11 +57,13 @@
         #window-clipping {
             border: 1px solid #f57665;
         }
-        .playable-buttons{
-            width:900px;
+        
+        .playable-buttons {
+            width: 900px;
         }
-        .playable-code{
-            width:900px;
+        
+        .playable-code {
+            width: 900px;
             min-height: 300px;
         }
     </style>
@@ -92,37 +96,40 @@
                         <!-- Post -->
                         <article class="box post">
                             <header id="01agosto">
-                                <h2>Quarta Atividade: CONTROLE DE VELOCIDADE
+                                <h2>Quinta Atividade: CONTROLE DE ORIENTAÇÃO
                                     <h4>(Assignment 04)</h4><br>
                                 </h2>
                             </header>
                             <!--span class="image featured"><img src="images/pic04.jpg" alt="" /></span-->
                             <!--h3>Left is the opposite of right</h3-->
-                            <p><b>Descrição da atividade</b>: Utilize como base <a href="https://developer.mozilla.org/pt-BR/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL" target="_blank">este tutorial</a> para realizar o desenho de um cubo, 
-                                a partir deste cubo realize as seguintes implementações: representar uma orientação com quatérnions para 
-                                realizar a rotação do cubo interpolando entre dois quatérnions
-                                 determinados utilizando Slerp. Tanto o tempo como os quatérnions deverão ser especificados pelo usuário.
+                            <p><b>Descrição da atividade</b>: Utilize como base <a href="https://developer.mozilla.org/pt-BR/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL" target="_blank">este tutorial</a> para realizar o desenho de um cubo,
+                                a partir deste cubo realize as seguintes implementações: representar uma orientação com quatérnions para realizar a rotação do cubo interpolando entre dois quatérnions determinados utilizando Slerp. Tanto o tempo como os
+                                quatérnions deverão ser especificados pelo usuário.
                             </p>
-                            <p>No código abaixo você poderá determinar o quatérnio utilizando ângulos de Euler (ex.: q = Quaternion(90,0,0)) e no frame
-                                adicionar o Quatérnion e o tempo, em segundos, de cada frame (ex.: f1 = Frame(q,5)). Após definir todos os frames é utilizando
-                                uma lista que será responsável por realizar a interpolação entre os frames utilizando a função goAnimate(lista) e dando o play no botão.
+                            <p>No código abaixo você poderá determinar o quatérnio utilizando ângulos de Euler (ex.: q = new Quaternion(90,0,0)) e no frame adicionar o Quatérnion e o tempo, em segundos, de cada frame (ex.: f1 = new Frame(q,5)). Após definir
+                                todos os frames é utilizando uma lista que será responsável por realizar a interpolação entre os frames utilizando a função goAnimate(lista) e dando o play no botão.
                             </p>
-                            
-                            <article>
-                                    <canvas id="canvas" width="900" height="400" class="playable-canvas"></canvas>
-                                    <div class="playable-buttons">
-                                   
-                                      <input id="play" type="button" value="Play" />
-                                      <input id="pause" type="button" value="Pause" />
-                                      <input id="reset" type="button" value="Reset" />
-                                    </div>
-                                    <textarea id="code" class="playable-code">
-  
-                                    </textarea>
-                                    <script src="gl-matrix.js"></script>
-                                    <script src="script.js"></script>
 
-                            </div>
+                            <article>
+                                <canvas id="canvas" width="900" height="400" class="playable-canvas"></canvas>
+                                <div class="playable-buttons">
+
+                                    <input id="play" type="button" value="Play" />
+                                    <input id="pause" type="button" value="Pause" />
+                                    <input id="reset" type="button" value="Reset" />
+                                </div>
+                                <textarea id="code" class="playable-code">
+q1 = new Quaternion(90,0,0);
+q2 = new Quaternion(0,90,0);
+q3 = new Quaternion(90,90,45);
+q4 = new Quaternion(0,90,30);
+lista_frames = [new Frame(q1,10),new Frame(q2,20),new Frame(q3,5),new Frame(q4,15)];
+goAnimate(lista_frames);
+                                    </textarea>
+                                <script src="gl-matrix.js"></script>
+                                <script src="script.js"></script>
+
+                    </div>
         </section>
 
 
