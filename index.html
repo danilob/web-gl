@@ -5,431 +5,436 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	<head>
-		<title>Web GL - Aplicações para CG</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.3.0/highlightjs-line-numbers.min.js"></script>
-		<script>
-			hljs.initHighlightingOnLoad();
-			hljs.initLineNumbersOnLoad({
-    singleLine: true
-});
 
-hljs.lineNumbersBlock(myCodeBlock, myOptions);
-		</script>
+<head>
+    <title>Web GL - Aplicações para CG</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.3.0/highlightjs-line-numbers.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad({
+            singleLine: true
+        });
 
-<script>
-		Height = 0;
-		Width = 0;
-			
+        hljs.lineNumbersBlock(myCodeBlock, myOptions);
+    </script>
 
-function draw() {
-			  var canvas = document.getElementById('cg-app');
-			  if (canvas.getContext) {
-				  
-		       Height = canvas.height;
-			   Width = canvas.width;
-			   drawBorderCanvas(canvas.getContext('2d'));
-					
-			  }else{
-				alert("Canvas não suportado!");
-			  }
-			}
-			function drawBorderCanvas(border){
-					border.beginPath();
-					border.moveTo(0,0);
-					border.lineTo(Width,0);
-					border.lineTo(Width,Height);
-					border.lineTo(0,Height);
-					border.lineTo(0,0);
-					border.stroke();
-			}
+    <script>
+        Height = 0;
+        Width = 0;
 
-	</script>
-	<script>
-	Width = 0;
-Height = 0;
-tx = 10;
-ty = 40;
-sx = 20;
-sy = 20;
-angle = 45;
-function draw2() {
-    var canvas = document.getElementById('cg-app2');
-    if (canvas.getContext) {
-        Width = canvas.width;
-        Height = canvas.height;
-        context = canvas.getContext('2d');
-        drawBorder(context);
-        drawAxis(context);
-		setTranslate();
-		setScale();
-		setRotate();
-        M = mult(transform(), mult(translate(tx, ty), mult(rotate(angle),scale(sx, sy))));
-        drawCube(M, context);
-		
-    }
-}
 
-function translate(x, y) { // dado dois pontos, x e y constroi a matriz homogenea de translação 
-    return [
-        [1, 0, x],
-        [0, 1, y],
-        [0, 0, 1]
-    ]; //retorna matriz 3x3
-}
+        function draw() {
+            var canvas = document.getElementById('cg-app');
+            if (canvas.getContext) {
 
-function scale(x, y) { // dado dois pontos, x e y constroi a matriz homogenea de translação 
-    return [
-        [x, 0, 0],
-        [0, y, 0],
-        [0, 0, 1]
-    ]; //retorna matriz 3x3
-}
+                Height = canvas.height;
+                Width = canvas.width;
+                drawBorderCanvas(canvas.getContext('2d'));
 
-function rotate(theta) { // rotaciona theta em graus
-    theta = Math.PI * theta / 180.; //transforma theta em ratianos
-    return [
-        [Math.cos(theta), -Math.sin(theta), 0],
-        [Math.sin(theta), Math.cos(theta), 0],
-        [0, 0, 1]
-    ]; //retorna matriz 3x3
-}
-
-function transform() {
-    return [
-        [1, 0, Width / 2],
-        [0, -1, Height / 2],
-        [0, 0, 1]
-    ];
-}
-
-function drawAxis(canv) {
-    canv.beginPath();
-    canv.setLineDash([1.5, 1.5]);
-    canv.moveTo(0, Height / 2);
-    canv.lineTo(Width, Height / 2);
-    canv.stroke();
-    canv.beginPath();
-    canv.moveTo(Width / 2, 0);
-    canv.lineTo(Width / 2, Height);
-    canv.stroke();
-}
-
-function drawCube(M, canv) { //desenha um cubo passando a matriz de transformação e o canvas para desenho
-    a = multVec(M, [0.5, 0.5, 1]);
-    b = multVec(M, [0.5, -0.5, 1]);
-    c = multVec(M, [-0.5, -0.5, 1]);
-    d = multVec(M, [-0.5, 0.5, 1]);
-    canv.beginPath();
-    canv.moveTo(a[0], a[1]);
-    canv.lineTo(b[0], b[1]);
-    canv.lineTo(c[0], c[1]);
-    canv.lineTo(d[0], d[1]);
-    canv.fill();
-}
-
-function drawBorder(border){
-    border.beginPath();
-	border.setLineDash([]);
-    border.moveTo(0,0);
-    border.lineTo(Width,0);
-    border.lineTo(Width,Height);
-    border.lineTo(0,Height);
-    border.lineTo(0,0);
-    border.stroke();
-}
-
-function mult(A, B) { //multiplicação de duas matrizes 3x3
-    var C = [
-        [1, 0, 0],
-        [0, 1, 0],
-        [0, 0, 1]
-    ];
-    var i;
-    var j;
-    for (i = 0; i < 3; i++) {
-        for (j = 0; j < 3; j++) {
-            C[i][j] = A[i][0] * B[0][j] + A[i][1] * B[1][j] + A[i][2] * B[2][j];
+            } else {
+                alert("Canvas não suportado!");
+            }
         }
-    }
-    return C; //retorna uma matriz 3x3
-}
 
-function multVec(A, b) { //multiplicação de uma matriz (3x3) e um vetor
-    var C = [0, 0, 0];
-    var i;
-    var j;
-    for (i = 0; i < 3; i++) {
-        C[i] = A[i][0] * b[0] + A[i][1] * b[1] + A[i][2] * b[2];
-    }
-    return C; //retorna um vetor
-}
-
-function setTranslate(){
-	tx = parseInt(document.getElementById("tx").value);
-	ty = parseInt(document.getElementById("ty").value);
-	redrawCanvas();
-}
-
-function setScale(){
-	sx = parseInt(document.getElementById("sx").value);
-	sy = parseInt(document.getElementById("sy").value);
-	redrawCanvas();
-}
-
-function setRotate(){
-	angle = parseInt(document.getElementById("angle").value);
-	redrawCanvas();
-}
-
-function redrawCanvas(){
-	var canvas = document.getElementById('cg-app2');
-    if (canvas.getContext) {
-        Width = canvas.width;
-        Height = canvas.height;
-        context = canvas.getContext('2d');
-		context.clearRect(0, 0, canvas.width, canvas.height);
-        drawBorder(context);
-        drawAxis(context);
-        M = mult(transform(), mult(translate(tx, ty), mult(rotate(angle),scale(sx, sy))));
-        drawCube(M, context);
-    }
-}
-ax = 0;
-ay = 0;
-bx = 0;
-cy = 0;
-by = 0;
-cx = 0;
-vx = 0;
-vy = 0;	
-function draw3() {
-    canvas2 = document.getElementById('cg-app3');
-    if (canvas2.getContext) {
-        Width = canvas2.width;
-        Height = canvas2.height;
-        context2 = canvas2.getContext('2d');
-		context2.clearRect(0, 0, 300, 200);
-		context2.beginPath();
-        drawBorder2(context2);
-        drawAxis2(context2);
-		M = mult(transform(), translate(ax, ay));
-		drawCircle(M,context2,'#68bde1');
-		drawLineParametric(ax,ay,vx,vy,context2,'#68bde1');
-		M = mult(transform(), translate(bx, by));
-		drawCircle(M,context2,'#ff9900');
-		M = mult(transform(), translate(cx, cy));
-		drawCircle(M,context2,'#ff9900');
-		drawLine(bx,by,cx,cy,context2,'#ff9900');
-		
-		
-    }
-}
-
-function setPointAVec(){
-	ax = parseInt(document.getElementById("ax").value);
-	ay = parseInt(document.getElementById("ay").value);
-	vx = parseInt(document.getElementById("vx").value);
-	vy = parseInt(document.getElementById("vy").value);
-	redrawCanvasReta();
-}
-
-function setPointBC(){
-	bx = parseInt(document.getElementById("bx").value);
-	by = parseInt(document.getElementById("by").value);
-	cx = parseInt(document.getElementById("cx").value);
-	cy = parseInt(document.getElementById("cy").value);
-	redrawCanvasReta();
-}
-
-function redrawCanvasReta(){
-	canvas2 = document.getElementById('cg-app3');
-    if (canvas2.getContext) {
-        var context = canvas2.getContext('2d');
-		context.clearRect(0, 0, 300, 200);
-		context.beginPath();
-		drawBorder2(context2);
-        drawAxis2(context2);
-        var M = mult(transform(), translate(ax, ay));
-		drawCircle(M,context,'#68bde1');
-		drawLineParametric(ax,ay,vx,vy,context,'#68bde1');
-		
-		M = mult(transform(), translate(bx, by));
-		drawCircle(M,context2,'#ff9900');
-		M = mult(transform(), translate(cx, cy));
-		drawCircle(M,context2,'#ff9900');
-		drawLine(bx,by,cx,cy,context2,'#ff9900');
-		
-    }
-}
-
-function drawBorder2(border) {
-        border.beginPath();
-		border.lineWidth = 2;
-
-		border.strokeStyle = '#000000';
-        border.setLineDash([]);
-        border.moveTo(0, 0);
-        border.lineTo(Width, 0);
-        border.lineTo(Width, Height);
-        border.lineTo(0, Height);
-        border.lineTo(0, 0);
-        border.stroke();
-    }
-
-function module(a, b) { //calcula modulo do vetor (a,b)
-        return Math.sqrt(a * a + b * b);
-    }
-	function drawAxis2(canv) {
-        canv.beginPath();
-		canv.lineWidth = 2;
-		canv.strokeStyle = '#000000';
-        canv.setLineDash([1.5, 1.5]);
-        canv.moveTo(0, Height / 2);
-        canv.lineTo(Width, Height / 2);
-        canv.stroke();
-        canv.beginPath();
-        canv.moveTo(Width / 2, 0);
-        canv.lineTo(Width / 2, Height);
-        canv.stroke();
-    }
-    function drawLineParametric(x_1, y_1, x_2, y_2, Canv,color) { //equação  com um ponto e um vetor
-        Canv.lineWidth = 3.5;
-		
-		Canv.strokeStyle = '#000000';	
-		if (module(x_2, y_2) == 0) {
-            //alert("O vetor é nulo, impossível obter a equação da reta.");
-            return;
-        } else {
-            lambda = Math.max(Height, Width);
-            y1 = y_1 + lambda * y_2;
-            x1 = x_1 + lambda * x_2;
-            lambda = -lambda;
-            y2 = y_1 + lambda * y_2;
-            x2 = x_1 + lambda * x_2;
-            v1 = multVec(transform(), [x1, y1, 1]);
-            v2 = multVec(transform(), [x2, y2, 1]);
-			Canv.beginPath();
-            Canv.moveTo(v1[0], v1[1]);
-            Canv.lineTo(v2[0], v2[1]);
-			Canv.strokeStyle = color;
-            Canv.stroke();
+        function drawBorderCanvas(border) {
+            border.beginPath();
+            border.moveTo(0, 0);
+            border.lineTo(Width, 0);
+            border.lineTo(Width, Height);
+            border.lineTo(0, Height);
+            border.lineTo(0, 0);
+            border.stroke();
         }
-		Canv.strokeStyle = '#000000';
+    </script>
+    <script>
+        Width = 0;
+        Height = 0;
+        tx = 10;
+        ty = 40;
+        sx = 20;
+        sy = 20;
+        angle = 45;
 
-    }
+        function draw2() {
+            var canvas = document.getElementById('cg-app2');
+            if (canvas.getContext) {
+                Width = canvas.width;
+                Height = canvas.height;
+                context = canvas.getContext('2d');
+                drawBorder(context);
+                drawAxis(context);
+                setTranslate();
+                setScale();
+                setRotate();
+                M = mult(transform(), mult(translate(tx, ty), mult(rotate(angle), scale(sx, sy))));
+                drawCube(M, context);
 
-    function drawLine(x_1, y_1, x_2, y_2, Canv,color) { //equação da reta com dois pontos (a,b) e (c,d)
-        Canv.strokeStyle = '#000000';
-		Canv.fillStyle = '#000000';
-		Canv.lineWidth = 3.5;
-		if ((x_2 - x_1) == 0 && (y_2 - y_1) == 0) {
-            //alert("Os pontos são iguais, impossível obter a equação da reta.");
-            return;
-        } else if ((x_2 - x_1) == 0) { //mesma abscissa
-            y1 = Height / 2;
-            x1 = x_1;
-            y2 = -Height / 2;
-            x2 = x_1;
-            v1 = multVec(transform(), [x1, y1, 1]);
-            v2 = multVec(transform(), [x2, y2, 1]);
-			Canv.beginPath();
-            Canv.moveTo(v1[0], v1[1]);
-            Canv.lineTo(v2[0], v2[1]);
-			Canv.strokeStyle = color;
-            Canv.stroke();
-        } else if ((y_2 - y_1) == 0) { //mesma coordenada
-            y1 = y_1;
-            x1 = Width / 2;
-            y2 = y_1;
-            x2 = -Width / 2;
-            v1 = multVec(transform(), [x1, y1, 1]);
-            v2 = multVec(transform(), [x2, y2, 1]);
-			Canv.beginPath();
-            Canv.moveTo(v1[0], v1[1]);
-            Canv.lineTo(v2[0], v2[1]);
-			Canv.strokeStyle = color;
-            Canv.stroke();
-        } else { //forma geral
-            m = (y_2 - y_1) / (x_2 - x_1);
-            y1 = (m * (Width / 2 - x_1)) + y_1;
-            x1 = (y1 - y_1) / m + x_1;
-            y2 = (m * (-Width / 2 - x_1)) + y_1;
-            x2 = ((y2 - y_1) / m) + x_1;
-            v1 = multVec(transform(), [x1, y1, 1]);
-            v2 = multVec(transform(), [x2, y2, 1]);
-			Canv.beginPath();
-            Canv.moveTo(v1[0], v1[1]);
-            Canv.lineTo(v2[0], v2[1]);
-			Canv.strokeStyle = color;
-            Canv.stroke();
+            }
         }
-		Canv.strokeStyle = '#000000';
-		Canv.fillStyle = '#000000';
 
-    }
+        function translate(x, y) { // dado dois pontos, x e y constroi a matriz homogenea de translação 
+            return [
+                [1, 0, x],
+                [0, 1, y],
+                [0, 0, 1]
+            ]; //retorna matriz 3x3
+        }
 
-    function drawCircle(M, canv, color) { //desenha um círculo
-		canv.beginPath();
-        canv.strokeStyle = '#000000';
-		c = multVec(M, [0, 0, 1]);
-		//alert("circle");
-        canv.arc(c[0], c[1], 5, 0, 2 * Math.PI, false);
-        canv.lineWidth = 2;
-		canv.fillStyle = color;
-		canv.fill();
-		canv.setLineDash([]);
-        canv.strokeStyle = color;
-        canv.stroke();  
+        function scale(x, y) { // dado dois pontos, x e y constroi a matriz homogenea de translação 
+            return [
+                [x, 0, 0],
+                [0, y, 0],
+                [0, 0, 1]
+            ]; //retorna matriz 3x3
+        }
+
+        function rotate(theta) { // rotaciona theta em graus
+            theta = Math.PI * theta / 180.; //transforma theta em ratianos
+            return [
+                [Math.cos(theta), -Math.sin(theta), 0],
+                [Math.sin(theta), Math.cos(theta), 0],
+                [0, 0, 1]
+            ]; //retorna matriz 3x3
+        }
+
+        function transform() {
+            return [
+                [1, 0, Width / 2],
+                [0, -1, Height / 2],
+                [0, 0, 1]
+            ];
+        }
+
+        function drawAxis(canv) {
+            canv.beginPath();
+            canv.setLineDash([1.5, 1.5]);
+            canv.moveTo(0, Height / 2);
+            canv.lineTo(Width, Height / 2);
+            canv.stroke();
+            canv.beginPath();
+            canv.moveTo(Width / 2, 0);
+            canv.lineTo(Width / 2, Height);
+            canv.stroke();
+        }
+
+        function drawCube(M, canv) { //desenha um cubo passando a matriz de transformação e o canvas para desenho
+            a = multVec(M, [0.5, 0.5, 1]);
+            b = multVec(M, [0.5, -0.5, 1]);
+            c = multVec(M, [-0.5, -0.5, 1]);
+            d = multVec(M, [-0.5, 0.5, 1]);
+            canv.beginPath();
+            canv.moveTo(a[0], a[1]);
+            canv.lineTo(b[0], b[1]);
+            canv.lineTo(c[0], c[1]);
+            canv.lineTo(d[0], d[1]);
+            canv.fill();
+        }
+
+        function drawBorder(border) {
+            border.beginPath();
+            border.setLineDash([]);
+            border.moveTo(0, 0);
+            border.lineTo(Width, 0);
+            border.lineTo(Width, Height);
+            border.lineTo(0, Height);
+            border.lineTo(0, 0);
+            border.stroke();
+        }
+
+        function mult(A, B) { //multiplicação de duas matrizes 3x3
+            var C = [
+                [1, 0, 0],
+                [0, 1, 0],
+                [0, 0, 1]
+            ];
+            var i;
+            var j;
+            for (i = 0; i < 3; i++) {
+                for (j = 0; j < 3; j++) {
+                    C[i][j] = A[i][0] * B[0][j] + A[i][1] * B[1][j] + A[i][2] * B[2][j];
+                }
+            }
+            return C; //retorna uma matriz 3x3
+        }
+
+        function multVec(A, b) { //multiplicação de uma matriz (3x3) e um vetor
+            var C = [0, 0, 0];
+            var i;
+            var j;
+            for (i = 0; i < 3; i++) {
+                C[i] = A[i][0] * b[0] + A[i][1] * b[1] + A[i][2] * b[2];
+            }
+            return C; //retorna um vetor
+        }
+
+        function setTranslate() {
+            tx = parseInt(document.getElementById("tx").value);
+            ty = parseInt(document.getElementById("ty").value);
+            redrawCanvas();
+        }
+
+        function setScale() {
+            sx = parseInt(document.getElementById("sx").value);
+            sy = parseInt(document.getElementById("sy").value);
+            redrawCanvas();
+        }
+
+        function setRotate() {
+            angle = parseInt(document.getElementById("angle").value);
+            redrawCanvas();
+        }
+
+        function redrawCanvas() {
+            var canvas = document.getElementById('cg-app2');
+            if (canvas.getContext) {
+                Width = canvas.width;
+                Height = canvas.height;
+                context = canvas.getContext('2d');
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                drawBorder(context);
+                drawAxis(context);
+                M = mult(transform(), mult(translate(tx, ty), mult(rotate(angle), scale(sx, sy))));
+                drawCube(M, context);
+            }
+        }
+        ax = 0;
+        ay = 0;
+        bx = 0;
+        cy = 0;
+        by = 0;
+        cx = 0;
+        vx = 0;
+        vy = 0;
+
+        function draw3() {
+            canvas2 = document.getElementById('cg-app3');
+            if (canvas2.getContext) {
+                Width = canvas2.width;
+                Height = canvas2.height;
+                context2 = canvas2.getContext('2d');
+                context2.clearRect(0, 0, 300, 200);
+                context2.beginPath();
+                drawBorder2(context2);
+                drawAxis2(context2);
+                M = mult(transform(), translate(ax, ay));
+                drawCircle(M, context2, '#68bde1');
+                drawLineParametric(ax, ay, vx, vy, context2, '#68bde1');
+                M = mult(transform(), translate(bx, by));
+                drawCircle(M, context2, '#ff9900');
+                M = mult(transform(), translate(cx, cy));
+                drawCircle(M, context2, '#ff9900');
+                drawLine(bx, by, cx, cy, context2, '#ff9900');
+
+
+            }
+        }
+
+        function setPointAVec() {
+            ax = parseInt(document.getElementById("ax").value);
+            ay = parseInt(document.getElementById("ay").value);
+            vx = parseInt(document.getElementById("vx").value);
+            vy = parseInt(document.getElementById("vy").value);
+            redrawCanvasReta();
+        }
+
+        function setPointBC() {
+            bx = parseInt(document.getElementById("bx").value);
+            by = parseInt(document.getElementById("by").value);
+            cx = parseInt(document.getElementById("cx").value);
+            cy = parseInt(document.getElementById("cy").value);
+            redrawCanvasReta();
+        }
+
+        function redrawCanvasReta() {
+            canvas2 = document.getElementById('cg-app3');
+            if (canvas2.getContext) {
+                var context = canvas2.getContext('2d');
+                context.clearRect(0, 0, 300, 200);
+                context.beginPath();
+                drawBorder2(context2);
+                drawAxis2(context2);
+                var M = mult(transform(), translate(ax, ay));
+                drawCircle(M, context, '#68bde1');
+                drawLineParametric(ax, ay, vx, vy, context, '#68bde1');
+
+                M = mult(transform(), translate(bx, by));
+                drawCircle(M, context2, '#ff9900');
+                M = mult(transform(), translate(cx, cy));
+                drawCircle(M, context2, '#ff9900');
+                drawLine(bx, by, cx, cy, context2, '#ff9900');
+
+            }
+        }
+
+        function drawBorder2(border) {
+            border.beginPath();
+            border.lineWidth = 2;
+
+            border.strokeStyle = '#000000';
+            border.setLineDash([]);
+            border.moveTo(0, 0);
+            border.lineTo(Width, 0);
+            border.lineTo(Width, Height);
+            border.lineTo(0, Height);
+            border.lineTo(0, 0);
+            border.stroke();
+        }
+
+        function module(a, b) { //calcula modulo do vetor (a,b)
+            return Math.sqrt(a * a + b * b);
+        }
+
+        function drawAxis2(canv) {
+            canv.beginPath();
+            canv.lineWidth = 2;
+            canv.strokeStyle = '#000000';
+            canv.setLineDash([1.5, 1.5]);
+            canv.moveTo(0, Height / 2);
+            canv.lineTo(Width, Height / 2);
+            canv.stroke();
+            canv.beginPath();
+            canv.moveTo(Width / 2, 0);
+            canv.lineTo(Width / 2, Height);
+            canv.stroke();
+        }
+
+        function drawLineParametric(x_1, y_1, x_2, y_2, Canv, color) { //equação  com um ponto e um vetor
+            Canv.lineWidth = 3.5;
+
+            Canv.strokeStyle = '#000000';
+            if (module(x_2, y_2) == 0) {
+                //alert("O vetor é nulo, impossível obter a equação da reta.");
+                return;
+            } else {
+                lambda = Math.max(Height, Width);
+                y1 = y_1 + lambda * y_2;
+                x1 = x_1 + lambda * x_2;
+                lambda = -lambda;
+                y2 = y_1 + lambda * y_2;
+                x2 = x_1 + lambda * x_2;
+                v1 = multVec(transform(), [x1, y1, 1]);
+                v2 = multVec(transform(), [x2, y2, 1]);
+                Canv.beginPath();
+                Canv.moveTo(v1[0], v1[1]);
+                Canv.lineTo(v2[0], v2[1]);
+                Canv.strokeStyle = color;
+                Canv.stroke();
+            }
+            Canv.strokeStyle = '#000000';
+
+        }
+
+        function drawLine(x_1, y_1, x_2, y_2, Canv, color) { //equação da reta com dois pontos (a,b) e (c,d)
+            Canv.strokeStyle = '#000000';
+            Canv.fillStyle = '#000000';
+            Canv.lineWidth = 3.5;
+            if ((x_2 - x_1) == 0 && (y_2 - y_1) == 0) {
+                //alert("Os pontos são iguais, impossível obter a equação da reta.");
+                return;
+            } else if ((x_2 - x_1) == 0) { //mesma abscissa
+                y1 = Height / 2;
+                x1 = x_1;
+                y2 = -Height / 2;
+                x2 = x_1;
+                v1 = multVec(transform(), [x1, y1, 1]);
+                v2 = multVec(transform(), [x2, y2, 1]);
+                Canv.beginPath();
+                Canv.moveTo(v1[0], v1[1]);
+                Canv.lineTo(v2[0], v2[1]);
+                Canv.strokeStyle = color;
+                Canv.stroke();
+            } else if ((y_2 - y_1) == 0) { //mesma coordenada
+                y1 = y_1;
+                x1 = Width / 2;
+                y2 = y_1;
+                x2 = -Width / 2;
+                v1 = multVec(transform(), [x1, y1, 1]);
+                v2 = multVec(transform(), [x2, y2, 1]);
+                Canv.beginPath();
+                Canv.moveTo(v1[0], v1[1]);
+                Canv.lineTo(v2[0], v2[1]);
+                Canv.strokeStyle = color;
+                Canv.stroke();
+            } else { //forma geral
+                m = (y_2 - y_1) / (x_2 - x_1);
+                y1 = (m * (Width / 2 - x_1)) + y_1;
+                x1 = (y1 - y_1) / m + x_1;
+                y2 = (m * (-Width / 2 - x_1)) + y_1;
+                x2 = ((y2 - y_1) / m) + x_1;
+                v1 = multVec(transform(), [x1, y1, 1]);
+                v2 = multVec(transform(), [x2, y2, 1]);
+                Canv.beginPath();
+                Canv.moveTo(v1[0], v1[1]);
+                Canv.lineTo(v2[0], v2[1]);
+                Canv.strokeStyle = color;
+                Canv.stroke();
+            }
+            Canv.strokeStyle = '#000000';
+            Canv.fillStyle = '#000000';
+
+        }
+
+        function drawCircle(M, canv, color) { //desenha um círculo
+            canv.beginPath();
+            canv.strokeStyle = '#000000';
+            c = multVec(M, [0, 0, 1]);
+            //alert("circle");
+            canv.arc(c[0], c[1], 5, 0, 2 * Math.PI, false);
+            canv.lineWidth = 2;
+            canv.fillStyle = color;
+            canv.fill();
+            canv.setLineDash([]);
+            canv.strokeStyle = color;
+            canv.stroke();
+
+            canv.fillStyle = '#000000';
+
+
+        }
+    </script>
+    <style>
+        /* for block of numbers */
         
-		canv.fillStyle = '#000000';
-		
+        td.hljs-ln-numbers {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            text-align: center;
+            color: #3a3a59;
+            border-right: 1px solid #CCC;
+            vertical-align: top;
+            padding-right: 5px;
+            /* your custom style here */
+        }
+        /* for block of code */
+        
+        td.hljs-ln-code {
+            padding-left: 10px;
+        }
+    </style>
+</head>
 
-    }
-	</script>
-		<style>
-				/* for block of numbers */
-td.hljs-ln-numbers {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+<body class="left-sidebar is-preload" onload="draw();draw2();draw3();">
+    <div id="page-wrapper">
 
-    text-align: center;
-    color: #3a3a59;
-    border-right: 1px solid #CCC;
-    vertical-align: top;
-    padding-right: 5px;
+        <!-- Header -->
+        <section id="header">
+            <div class="container">
 
-    /* your custom style here */
-}
+                <!-- Logo -->
+                <h1 id="logo">CG com Web-GL</h1>
+                <p>Aplicações em Computação Gráfica utilizando Web-GL.</p>
 
-/* for block of code */
-td.hljs-ln-code {
-    padding-left: 10px;
-}
-			</style>
-	</head>
-	<body class="left-sidebar is-preload" onload="draw();draw2();draw3();">
-		<div id="page-wrapper">
-
-			<!-- Header -->
-				<section id="header">
-					<div class="container">
-
-						<!-- Logo -->
-							<h1 id="logo">CG com Web-GL</h1>
-							<p>Aplicações em Computação Gráfica utilizando Web-GL.</p>
-
-						<!-- Nav -->
-							<!--nav id="nav">
+                <!-- Nav -->
+                <!--nav id="nav">
 								<ul>
 									<li><a class="icon fa-home" href="index.html"><span>Introduction</span></a></li>
 									<li>
@@ -455,85 +460,93 @@ td.hljs-ln-code {
 								</ul>
 							</nav-->
 
-					</div>
-				</section>
+            </div>
+        </section>
 
-			<!-- Main -->
-				<section id="main">
-					<div class="container">
-						<div class="row">
+        <!-- Main -->
+        <section id="main">
+            <div class="container">
+                <div class="row">
 
-							<!-- Sidebar -->
-								<div id="sidebar" class="col-4 col-12-medium">
+                    <!-- Sidebar -->
+                    <div id="sidebar" class="col-4 col-12-medium">
 
-									<!-- Excerpts -->
-										<section>
-											<ul class="divided">
-												<li>
+                        <!-- Excerpts -->
+                        <section>
+                            <ul class="divided">
+                                <li>
 
-													<!-- Excerpt -->
-														<article class="box excerpt">
-															<header>
-																<span class="date">01, AGOSTO</span>
-																<h3><a href="#01agosto">Introdução</a></h3>
-															</header>
-															<p>Criação de uma janela básica com canvas.</p>
-														</article>
+                                    <!-- Excerpt -->
+                                    <article class="box excerpt">
+                                        <header>
+                                            <span class="date">01, AGOSTO</span>
+                                            <h3><a href="#01agosto">Introdução</a></h3>
+                                        </header>
+                                        <p>Criação de uma janela básica com canvas.</p>
+                                    </article>
 
-												</li>
-												<li>
+                                </li>
+                                <li>
 
-														<!-- Excerpt -->
-															<article class="box excerpt">
-																<header>
-																	<span class="date">06, AGOSTO</span>
-																	<h3><a href="#06agosto">Matrizes de Transformação</a></h3>
-																</header>
-																<p>Implementação das principais matrizes de transformação aplicadas a um cubo.</p>
-															</article>	
-												</li>
-												<li>
+                                    <!-- Excerpt -->
+                                    <article class="box excerpt">
+                                        <header>
+                                            <span class="date">06, AGOSTO</span>
+                                            <h3><a href="#06agosto">Matrizes de Transformação</a></h3>
+                                        </header>
+                                        <p>Implementação das principais matrizes de transformação aplicadas a um cubo.</p>
+                                    </article>
+                                </li>
+                                <li>
 
-													<!-- Excerpt -->
-														<article class="box excerpt">
-															<header>
-																<span class="date">16, AGOSTO</span>
-																<h3><a href="#16agosto">Retas no Plano</a></h3>
-															</header>
-															<p>Implementação de retas a partir de dois pontos ou de um ponto e um vetor.</p>
-														</article>	
-												</li>
-											</ul>
-										</section>
+                                    <!-- Excerpt -->
+                                    <article class="box excerpt">
+                                        <header>
+                                            <span class="date">16, AGOSTO</span>
+                                            <h3><a href="#16agosto">Retas no Plano</a></h3>
+                                        </header>
+                                        <p>Implementação de retas a partir de dois pontos ou de um ponto e um vetor.</p>
+                                    </article>
+                                </li>
+                                <li>
 
-									
+                                    <!-- Excerpt -->
+                                    <article class="box excerpt">
+                                        <header>
+                                            <span class="date">20, NOVEMBRO</span>
+                                            <h3><a href="#20novembro">Atividades da Segunda Avaliação</a></h3>
+                                        </header>
+                                        <p>Descrição e implementações das atividades requeridas para segunda avaliação.</p>
+                                    </article>
+                                </li>
+                            </ul>
+                        </section>
 
-								</div>
 
-							<!-- Content -->
-								<div id="content" class="col-8 col-12-medium imp-medium">
 
-									<!-- Post -->
-										<article class="box post">
-											<header id="01agosto">
-												<h2>Introdução <br><h4>01, AGOSTO</h4></h2>
-											</header>
-											<!--span class="image featured"><img src="images/pic04.jpg" alt="" /></span-->
-											<!--h3>Left is the opposite of right</h3-->
-											<p>Utilizaremos HTML5 + Canvas para desenvolvermos páginas com contéudo de gráfico
-												para aplicarmos a teoria vista em sala de aula. Primeiramente vamos definir o 
-												espaço de trabalho, um arquivo que contenha uma tanto elementos HTML como Javascript.
-											</p>
-											<p>No código abaixo está uma página básica em HTML com canvas. Na linha 14, temos a tag que 
-												chama que descreve um espaço que irá exibir o conteúdo do canvas, após a página ser renderizada
-												(onload), linha 13, chamamos uma função no javascript chamada draw();. Nesta função criamos a
-												variável que irá associar-se com a tag html canvas cujo id é "cg-app", na linha 4, na linha 5
-												temos um comando condicional que verifica se o computador do usuário suporta o canvas, em caso negativo
-												exibimos um pop-up dizendo que o canvas não é suportado (linha 9), caso contrário exibimos um pop-up
-												dizendo que o canvas é suportado, linha 6, e é neste bloco condicional que fazemos todos os códigos
-												responsáveis pelo desenho no espaço delimitado pela largura 300px e altura 200px (linha 14). 
-											</p>
-<pre><code class="xml">&lt;html&gt;
+                    </div>
+
+                    <!-- Content -->
+                    <div id="content" class="col-8 col-12-medium imp-medium">
+
+                        <!-- Post -->
+                        <article class="box post">
+                            <header id="01agosto">
+                                <h2>Introdução <br>
+                                    <h4>01, AGOSTO</h4>
+                                </h2>
+                            </header>
+                            <!--span class="image featured"><img src="images/pic04.jpg" alt="" /></span-->
+                            <!--h3>Left is the opposite of right</h3-->
+                            <p>Utilizaremos HTML5 + Canvas para desenvolvermos páginas com contéudo de gráfico para aplicarmos a teoria vista em sala de aula. Primeiramente vamos definir o espaço de trabalho, um arquivo que contenha uma tanto elementos HTML
+                                como Javascript.
+                            </p>
+                            <p>No código abaixo está uma página básica em HTML com canvas. Na linha 14, temos a tag que chama que descreve um espaço que irá exibir o conteúdo do canvas, após a página ser renderizada (onload), linha 13, chamamos uma função
+                                no javascript chamada draw();. Nesta função criamos a variável que irá associar-se com a tag html canvas cujo id é "cg-app", na linha 4, na linha 5 temos um comando condicional que verifica se o computador do usuário suporta
+                                o canvas, em caso negativo exibimos um pop-up dizendo que o canvas não é suportado (linha 9), caso contrário exibimos um pop-up dizendo que o canvas é suportado, linha 6, e é neste bloco condicional que fazemos todos os
+                                códigos responsáveis pelo desenho no espaço delimitado pela largura 300px e altura 200px (linha 14).
+                            </p>
+                            <pre><code class="xml">&lt;html&gt;
 	&lt;script&gt;
 			function draw() {
 				var canvas = document.getElementById('cg-app');
@@ -549,16 +562,13 @@ td.hljs-ln-code {
 		&lt;canvas id="cg-app" width="300" height="200"&gt;&lt;/canvas&gt;
 	&lt;/body&gt;
 &lt;/html&gt;</code></pre>
-<p>No código abaixo descreve-se uma função que desenha as bordas do canvas cujo id é "cg-app". Neste código
-	descrevemos apenas o código descrito na tag script do código acima. Considerando que o canvas é suportado, inicialmente descrevemos duas variáveis
-	globais que armazenam a altura (Height) e a largura (Width) do canvas, nas linhas 6 e 7 setamos os valores
-	corretos.  Logo após, chamamos a função que desenha a borda, linha 8, passando o contexto de desenho bidimensional ("2d").
-	Na função drawBorder, linha 14, traçamos as linhas que definem a forma do canvas. Observe que o canvas possui uma forma particular de
-	sistema de coordenadas, o centro do sistema é o canto superior esquerdo, o eixo x cresce para direita, como acontece no sistema
-	usual de coordenadas 2d, e o eixo y cresce para baixo, ao contrário do que acontece no sistema usual. A figura logo abaixo ilustra isso.</p>
-	<img src="images/Canvas_default_grid.png"/>
+                            <p>No código abaixo descreve-se uma função que desenha as bordas do canvas cujo id é "cg-app". Neste código descrevemos apenas o código descrito na tag script do código acima. Considerando que o canvas é suportado, inicialmente
+                                descrevemos duas variáveis globais que armazenam a altura (Height) e a largura (Width) do canvas, nas linhas 6 e 7 setamos os valores corretos. Logo após, chamamos a função que desenha a borda, linha 8, passando o contexto
+                                de desenho bidimensional ("2d"). Na função drawBorder, linha 14, traçamos as linhas que definem a forma do canvas. Observe que o canvas possui uma forma particular de sistema de coordenadas, o centro do sistema é o canto
+                                superior esquerdo, o eixo x cresce para direita, como acontece no sistema usual de coordenadas 2d, e o eixo y cresce para baixo, ao contrário do que acontece no sistema usual. A figura logo abaixo ilustra isso.</p>
+                            <img src="images/Canvas_default_grid.png" />
 
-<pre><code class="language-js">Height = 0;
+                            <pre><code class="language-js">Height = 0;
 Width = 0;
 function draw() {
 	var canvas = document.getElementById('cg-app');
@@ -580,38 +590,33 @@ function drawBorder(border){
 	border.lineTo(0,0);
 	border.stroke();
 }</code></pre>
-<p>Saída do código acima:</p>
-<canvas id="cg-app" width="300" height="200"></canvas>	
-<p>Para mais informações consulte <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes">este link</a> que contém um tutorial que descreve os primeiros passos para se desenhar no canvas.</p>						
+                            <p>Saída do código acima:</p>
+                            <canvas id="cg-app" width="300" height="200"></canvas>
+                            <p>Para mais informações consulte <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes">este link</a> que contém um tutorial que descreve os primeiros passos para se desenhar no canvas.</p>
 
-										</article>
-										<article class="box post">
-												<header id="06agosto">
-													<h2>Matrizes de Transformação <br><h4>06, AGOSTO</h4></h2>
-												</header>
-												<p>Em sala de aula desenvolvemos as principais matrizes de transformação geométricas para 2D.
-												São elas: translação, rotação e escala. As funções que realizam essas transformações resultam
-												as matrizes de translação 3x3, linha 16, tendo como entrada o deslocamento no eixo x e y; a matriz de
-												escala 3x3, linha 24, tendo como entrada a escala no eixo x e y; e a matriz de rotação 3x3, linha 32, tendo como
-												entrada o ângulo de rotação, em graus, que internamente será convertido em radianos (linha 33). Todas
-												as matrizes estabelecem uma matriz de transformação homogenêa.
-											</p>
-											<p>Além dessas matrizes de tranformação no código, temos as funções que realizam a multiplicação entre:
-												duas matrizes 3x3, linha 84; uma matriz 3x3 e um vetor 3x1, linha 100. A função transform(), na linha 41, é responsável
-												por converter um ponto, ou vetor, dado em um sistema de coordenadas usual para o sistema de coordenadas do canvas. Consideramos
-												o sistema de coordenadas usual com o centro (0,0) no meio do canvas, ou seja, no ponto (width/2,height/2).
-											</p>
-											<p>Para ilustrar as transformações aplicadas ao ponto utilizamos um cubo, como primitiva. O cubo tem seu centro na origem
-												e lado igual a 1 (na figura abaixo). Os pontos que definem este cubo estão compreendidas entre as linhas 62 e 65. De acordo com a matriz de transformação, M, 
-												esses pontos iniciais recebem outros valores e são desenhados no canvas. Diferentemente do desenho da borda, utilizamos fill() para que a
-												figura seja preenchida, ao invés de vazada.
-											</p>
-											<img src="images/Canvas_cube.png"/>
-											<p>Realizou-se neste código a seguinte composição de transformações: uma escala de 20 no eixo x e 20 no eixo y, uma rotação de 45 graus e uma translação
-												de 10 no eixo x e 40 no eixo y (linha 11). Observe que a ordem de composição entre as matrizes é importante, e faz diferença no 
-												desenho final. A função responsável por desenha o cubo com a matriz de transformação M esta na linha 61.
-											</p>
-<pre><code class="language-js">Width = 0;
+                        </article>
+                        <article class="box post">
+                            <header id="06agosto">
+                                <h2>Matrizes de Transformação <br>
+                                    <h4>06, AGOSTO</h4>
+                                </h2>
+                            </header>
+                            <p>Em sala de aula desenvolvemos as principais matrizes de transformação geométricas para 2D. São elas: translação, rotação e escala. As funções que realizam essas transformações resultam as matrizes de translação 3x3, linha 16,
+                                tendo como entrada o deslocamento no eixo x e y; a matriz de escala 3x3, linha 24, tendo como entrada a escala no eixo x e y; e a matriz de rotação 3x3, linha 32, tendo como entrada o ângulo de rotação, em graus, que internamente
+                                será convertido em radianos (linha 33). Todas as matrizes estabelecem uma matriz de transformação homogenêa.
+                            </p>
+                            <p>Além dessas matrizes de tranformação no código, temos as funções que realizam a multiplicação entre: duas matrizes 3x3, linha 84; uma matriz 3x3 e um vetor 3x1, linha 100. A função transform(), na linha 41, é responsável por
+                                converter um ponto, ou vetor, dado em um sistema de coordenadas usual para o sistema de coordenadas do canvas. Consideramos o sistema de coordenadas usual com o centro (0,0) no meio do canvas, ou seja, no ponto (width/2,height/2).
+                            </p>
+                            <p>Para ilustrar as transformações aplicadas ao ponto utilizamos um cubo, como primitiva. O cubo tem seu centro na origem e lado igual a 1 (na figura abaixo). Os pontos que definem este cubo estão compreendidas entre as linhas
+                                62 e 65. De acordo com a matriz de transformação, M, esses pontos iniciais recebem outros valores e são desenhados no canvas. Diferentemente do desenho da borda, utilizamos fill() para que a figura seja preenchida, ao invés
+                                de vazada.
+                            </p>
+                            <img src="images/Canvas_cube.png" />
+                            <p>Realizou-se neste código a seguinte composição de transformações: uma escala de 20 no eixo x e 20 no eixo y, uma rotação de 45 graus e uma translação de 10 no eixo x e 40 no eixo y (linha 11). Observe que a ordem de composição
+                                entre as matrizes é importante, e faz diferença no desenho final. A função responsável por desenha o cubo com a matriz de transformação M esta na linha 61.
+                            </p>
+                            <pre><code class="language-js">Width = 0;
 Height = 0;
 function draw() {
 	var canvas = document.getElementById('canv');
@@ -719,61 +724,69 @@ function multVec(A, b) { //multiplicação de uma matriz (3x3) e um vetor
 	}
 	return C; //retorna um vetor 3x1
 }</code></pre>
-<p>Saída do código acima:</p>
-<canvas id="cg-app2" width="300" height="200"></canvas>
-<p>Abaixo pode-se aplicar as matrizes em tempo real (atividade requisitada em sala).	
-<fieldset>
-	<strong>Translação</strong> <br>
-	x: <input type="number" id="tx" min="-1000" max="1000" value="10" onchange="setTranslate();">
-	y: <input type="number" id="ty" min="-1000" max="1000" value="40" onchange="setTranslate();">
-</fieldset>
-<fieldset>
-		<strong>Escala</strong> <br>
-		x: <input type="number" id="sx" min="0" max="1000" value="20" onchange="setScale();">
-		y: <input type="number" id="sy" min="0" max="1000" value="20" onchange="setScale();">
-</fieldset>
-<fieldset>
-		<strong>Rotação</strong> <br>
-		theta: <input type="number" id="angle" min="-360" max="360" value="45"  onchange="setRotate();"> graus.
-</fieldset></p>
-											</article>
-											<article class="box post">
-												<header id="16agosto">
-													<h2>Retas no plano <br><h4>16, AGOSTO</h4></h2>
-												</header>
-												<p>Implementação de retas a partir de um ponto e um vetor e a partir de dois pontos.</p>
-												<p>Saída do código acima:</p>
-												<canvas id="cg-app3" width="300" height="200"></canvas>
-												<p>Abaixo pode-se aplicar as matrizes em tempo real (atividade requisitada em sala).	
-												<fieldset>
-													<strong>Reta Azul, Ponto A e vetor V</strong> <br>
-													ax: <input type="number" id="ax" min="-1000" max="1000" value="0" onchange="setPointAVec();">
-													ay: <input type="number" id="ay" min="-1000" max="1000" value="0" onchange="setPointAVec();">
-													vx: <input type="number" id="vx" min="-1000" max="1000" value="0" onchange="setPointAVec();">
-													vy: <input type="number" id="vy" min="-1000" max="1000" value="0" onchange="setPointAVec();">
-												</fieldset>
-												<fieldset>
-													<strong>Reta Laranja, Ponto B e Ponto C</strong> <br>
-													bx: <input type="number" id="bx" min="-1000" max="1000" value="0" onchange="setPointBC();">
-													by: <input type="number" id="by" min="-1000" max="1000" value="0" onchange="setPointBC();">
-													cx: <input type="number" id="cx" min="-1000" max="1000" value="0" onchange="setPointBC();">
-													cy: <input type="number" id="cy" min="-1000" max="1000" value="0" onchange="setPointBC();">
-												</fieldset>
-												</p>
-											</article>
-								</div>
+                            <p>Saída do código acima:</p>
+                            <canvas id="cg-app2" width="300" height="200"></canvas>
+                            <p>Abaixo pode-se aplicar as matrizes em tempo real (atividade requisitada em sala).
+                                <fieldset>
+                                    <strong>Translação</strong> <br> x: <input type="number" id="tx" min="-1000" max="1000" value="10" onchange="setTranslate();"> y: <input type="number" id="ty" min="-1000" max="1000" value="40" onchange="setTranslate();">
+                                </fieldset>
+                                <fieldset>
+                                    <strong>Escala</strong> <br> x: <input type="number" id="sx" min="0" max="1000" value="20" onchange="setScale();"> y: <input type="number" id="sy" min="0" max="1000" value="20" onchange="setScale();">
+                                </fieldset>
+                                <fieldset>
+                                    <strong>Rotação</strong> <br> theta: <input type="number" id="angle" min="-360" max="360" value="45" onchange="setRotate();"> graus.
+                                </fieldset>
+                            </p>
+                        </article>
+                        <article class="box post">
+                            <header id="16agosto">
+                                <h2>Retas no plano <br>
+                                    <h4>16, AGOSTO</h4>
+                                </h2>
+                            </header>
+                            <p>Implementação de retas a partir de um ponto e um vetor e a partir de dois pontos.</p>
+                            <p>Saída do código acima:</p>
+                            <canvas id="cg-app3" width="300" height="200"></canvas>
+                            <p>Abaixo pode-se aplicar as matrizes em tempo real (atividade requisitada em sala).
+                                <fieldset>
+                                    <strong>Reta Azul, Ponto A e vetor V</strong> <br> ax: <input type="number" id="ax" min="-1000" max="1000" value="0" onchange="setPointAVec();"> ay: <input type="number" id="ay" min="-1000" max="1000" value="0" onchange="setPointAVec();">                                    vx: <input type="number" id="vx" min="-1000" max="1000" value="0" onchange="setPointAVec();"> vy: <input type="number" id="vy" min="-1000" max="1000" value="0" onchange="setPointAVec();">
+                                </fieldset>
+                                <fieldset>
+                                    <strong>Reta Laranja, Ponto B e Ponto C</strong> <br> bx: <input type="number" id="bx" min="-1000" max="1000" value="0" onchange="setPointBC();"> by: <input type="number" id="by" min="-1000" max="1000" value="0" onchange="setPointBC();">                                    cx: <input type="number" id="cx" min="-1000" max="1000" value="0" onchange="setPointBC();"> cy: <input type="number" id="cy" min="-1000" max="1000" value="0" onchange="setPointBC();">
+                                </fieldset>
+                            </p>
+                        </article>
 
-						</div>
-					</div>
-				</section>
 
-			<!-- Footer -->
-				<section id="footer">
-					<div class="container">
-						<header>
-							<h2>Questões ou comentários?</h2>
-						</header>
-						<!--div class="row">
+                        <article class="box post">
+                            <header id="20novembro">
+                                <h2>Atividades da Segunda Avaliação <br>
+                                    <h4>20, NOVEMBRO</h4>
+                                </h2>
+                            </header>
+                            <p>Abaixo seguem os links de cada uma das atividades desenvolvidas na disciplina.</p>
+                            <li>Atividade 1 - <a href="https://danilob.github.io/web-gl/assignment1/" target="_blank">RECORTE</a></li>
+                            <li>Atividade 2 - <a href="https://danilob.github.io/web-gl/assignment2/" target="_blank">RASTERIZAÇÃO</a></li>
+                            <li>Atividade 3 - <a href="https://danilob.github.io/web-gl/assignment3/" target="_blank">CURVAS</a></li>
+                            <li>Atividade 4 - <a href="https://danilob.github.io/web-gl/assignment4/" target="_blank">CONTROLE DE VELOCIDADE</a></li>
+                            <li>Atividade 5 - <a href="https://danilob.github.io/web-gl/assignment5/" target="_blank">CONTROLE DE ORIENTAÇÃO </a></li>
+                            <li>Atividade 6 - <a href="https://danilob.github.io/web-gl/assignment6/" target="_blank">CINEMÁTICA DIRETA</a></li>
+                            <li>Atividade 7 - <a href="https://danilob.github.io/web-gl/assignment7/" target="_blank">CINEMÁTICA INVERSA</a></li>
+
+                        </article>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <section id="footer">
+            <div class="container">
+                <header>
+                    <h2>Questões ou comentários?</h2>
+                </header>
+                <!--div class="row">
 							<div class="col-6 col-12-medium">
 								<section>
 									<form method="post" action="#">
@@ -794,10 +807,10 @@ function multVec(A, b) { //multiplicação de uma matriz (3x3) e um vetor
 									</form>
 								</section>
 							</div-->
-							<div class="col-6 col-12-medium">
-								<section>
-									<p>Envie e-mail para <strong>danilo.borges@uece.br</strong>.</p>
-									<!--div class="row">
+                <div class="col-6 col-12-medium">
+                    <section>
+                        <p>Envie e-mail para <strong>danilo.borges@uece.br</strong>.</p>
+                        <!--div class="row">
 										<div class="col-6 col-12-small">
 											<ul class="icons">
 												<li class="icon fa-home">
@@ -813,7 +826,7 @@ function multVec(A, b) { //multiplicação de uma matriz (3x3) e um vetor
 												</li>
 											</ul>
 										</div-->
-										<!--div class="col-6 col-12-small">
+                        <!--div class="col-6 col-12-small">
 											<ul class="icons">
 												<li class="icon fa-twitter">
 													<a href="#">@untitled</a>
@@ -829,28 +842,30 @@ function multVec(A, b) { //multiplicação de uma matriz (3x3) e um vetor
 												</li>
 											</ul>
 										</div-->
-									</div>
-								</section>
-							</div>
-						</div>
-					</div>
-					<div id="copyright" class="container">
-						<ul class="links">
-							<!--li>&copy; Danilo Borges. All rights reserved.</li--><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-						</ul>
-					</div>
-				</section>
+                </div>
+                </section>
+            </div>
+    </div>
+    </div>
+    <div id="copyright" class="container">
+        <ul class="links">
+            <!--li>&copy; Danilo Borges. All rights reserved.</li-->
+            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+        </ul>
+    </div>
+    </section>
 
-		</div>
+    </div>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.dropotron.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.dropotron.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
 
-	</body>
+
+</body>
+
 </html>
